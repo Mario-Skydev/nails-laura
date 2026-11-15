@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Administración · Reservas</title>
+<style>
+  :root{
+    --p:#b0476b;--p-soft:#f6e6ec;--bg:#f6f3f2;--card:#fff;--ink:#2b2226;--muted:#7a6b70;--line:#e6dcde;
+    --ok:#1f8f5f;--bad:#b3261e;--radius:14px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);padding-bottom:96px}
+  button,input,textarea,select{font:inherit;color:inherit}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px}
+  header{padding:28px 0 12px}
+  h1{font:600 26px var(--serif);margin:0}
+  header p{color:var(--muted);margin:4px 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:0 0 14px}
+  .card h2{font:600 18px var(--serif);margin:0 0 12px}
+  .card .sub{color:var(--muted);font-size:13px;margin:-8px 0 12px}
+  label{display:block;font-weight:500;font-size:13px;margin:0 0 5px}
+  input[type=text],input[type=tel],input[type=number],input[type=password],input[type=date],input[type=time],textarea,select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:10px 11px;background:#fff;outline:none;min-width:0}
+  input:focus,textarea:focus,select:focus{border-color:var(--p)}
+  textarea{min-height:64px;resize:vertical}
+  .f{margin-bottom:12px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  @media (max-width:520px){.g2,.g3{grid-template-columns:1fr}}
+  .chk{display:flex;align-items:center;gap:8px;font-weight:400;font-size:14px;margin:0 0 8px;cursor:pointer}
+  .chk input{width:18px;height:18px;accent-color:var(--p)}
+  .btn{border:0;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer;background:var(--p);color:#fff}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-line{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-line:hover{border-color:var(--p)}
+  .btn-sm{padding:7px 11px;font-size:13px}
+  .btn-x{background:transparent;color:var(--bad);border:1.5px solid #f0d4d2}
+  .help{font-size:13px;color:var(--muted);margin:6px 0 0}
+  .note{background:#fff8e6;border:1px solid #f1e0b0;border-radius:10px;padding:10px 12px;font-size:13px;margin:0 0 12px}
+  .svc{border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+  .svc-top{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .svc-top .idx{font-weight:600;color:var(--muted);font-size:13px;flex:1}
+  .days .row{display:grid;grid-template-columns:120px 1fr 1fr;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+  .days .row:last-child{border-bottom:0}
+  .days .row.off input[type=time]{opacity:.35}
+  @media (max-width:520px){.days .row{grid-template-columns:1fr 1fr}.days .row .chk{grid-column:1/-1;margin:0}}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .chip{background:var(--p-soft);border-radius:999px;padding:4px 6px 4px 12px;font-size:13px;display:flex;align-items:center;gap:4px}
+  .chip button{border:0;background:transparent;cursor:pointer;font-size:16px;line-height:1;color:var(--muted);padding:0 4px}
+  .logo-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .logo-prev{width:84px;height:84px;border-radius:50%;object-fit:cover;background:var(--p-soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;overflow:hidden}
+  .colors{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .sw{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}
+  .color-in{display:flex;gap:8px;align-items:center}
+  .color-in input[type=color]{width:46px;height:40px;border:1.5px solid var(--line);border-radius:10px;padding:2px;background:#fff;flex:none}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px calc(12px + env(safe-area-inset-bottom));backdrop-filter:blur(6px);z-index:10}
+  .bar .wrap{display:flex;gap:10px;align-items:center;padding:0}
+  .bar .msg{flex:1;font-size:13px;color:var(--muted);min-width:0}
+  .msg.ok{color:var(--ok)}.msg.bad{color:var(--bad)}
+  .status{font-size:13px;margin-top:10px;min-height:1em}
+  .status.ok{color:var(--ok)}.status.bad{color:var(--bad)}
+  .conn-ok{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .conn-ok span{color:var(--ok);font-weight:500}
+  details summary{cursor:pointer;color:var(--p);font-size:13px;margin-top:8px}
+  details ol{padding-left:18px;font-size:13px;color:var(--muted)}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Panel de administración</h1>
+    <p>Configura tu negocio. Los cambios aparecen en tu página al guardar.</p>
+  </header>
+
+  <!-- Conexión -->
+  <section class="card" id="connCard">
+    <h2>Conectar con tu página</h2>
+    <p class="sub">Solo hay que hacerlo una vez en cada dispositivo.</p>
+    <div class="g2">
+      <div class="f"><label for="owner">Usuario de GitHub</label><input type="text" id="owner" autocomplete="username" autocapitalize="off" spellcheck="false"></div>
+      <div class="f"><label for="repo">Nombre del repositorio</label><input type="text" id="repo" autocapitalize="off" spellcheck="false"></div>
+    </div>
+    <div class="f"><label for="token">Clave de acceso (token)</label><input type="password" id="token" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></div>
+    <label class="chk"><input type="checkbox" id="remember" checked> Recordar en este dispositivo</label>
+    <div class="note">Usa solo dispositivos tuyos. Quien tenga esta clave puede cambiar tu página. Si pierdes el teléfono, borra el token en GitHub.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="connect">Conectar</button>
+      <button class="btn btn-line" id="offline">Editar sin conectar</button>
+    </div>
+    <details><summary>¿Cómo consigo la clave?</summary>
+      <ol>
+        <li>En GitHub, abre tu foto → <b>Settings</b> → <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.</li>
+        <li>En <b>Repository access</b> elige <b>Only select repositories</b> y marca el repositorio de tu página.</li>
+        <li>En <b>Permissions → Contents</b> elige <b>Read and write</b>.</li>
+        <li>Crea el token, cópialo y pégalo aquí.</li>
+      </ol>
+    </details>
+    <p class="status" id="connStatus"></p>
+  </section>
+
+  <section class="card" id="connInfo" hidden>
+    <div class="conn-ok"><span id="connLabel">Conectada</span><button class="btn btn-line btn-sm" id="disconnect">Desconectar</button></div>
+  </section>
+
+  <div id="editor" hidden>
+    <!-- Negocio -->
+    <section class="card">
+      <h2>Tu negocio</h2>
+      <div class="f"><label for="nombre">Nombre del negocio</label><input type="text" id="nombre" maxlength="60"></div>
+      <div class="f"><label for="eslogan">Frase corta (opcional)</label><input type="text" id="eslogan" maxlength="90" placeholder="Ej.: Manicura y pedicura con cariño"></div>
+      <div class="f"><label for="whatsapp">WhatsApp para recibir reservas</label><input type="tel" id="whatsapp" placeholder="+53 5XXXXXXX"><p class="help">Con el código de país: +53 y tu número.</p></div>
+      <div class="f"><label for="direccion">Zona o dirección</label><input type="text" id="direccion" placeholder="Ej.: Vedado, La Habana"></div>
+      <label class="chk"><input type="checkbox" id="mostrarDireccion"> Mostrar la dirección en la página</label>
+      <label class="chk"><input type="checkbox" id="aDomicilio"> Ofrezco servicio a domicilio</label>
+      <div class="f" style="margin-top:10px"><label for="moneda">Precios en</label>
+        <select id="moneda"><option value="CUP">CUP</option><option value="USD">USD</option><option value="ambas">CUP y USD</option></select></div>
+      <div class="f"><label for="nota">Nota para las clientas (opcional)</label><textarea id="nota" maxlength="240" placeholder="Ej.: Por favor, llega 5 minutos antes."></textarea></div>
+    </section>
+
+    <!-- Apariencia -->
+    <section class="card">
+      <h2>Logo y colores</h2>
+      <div class="logo-row f">
+        <div class="logo-prev" id="logoPrev">Sin logo</div>
+        <div>
+          <input type="file" id="logoFile" accept="image/*" hidden>
+          <button class="btn btn-line btn-sm" id="logoPick">Subir logo</button>
+          <button class="btn btn-x btn-sm" id="logoDel" hidden>Quitar</button>
+          <p class="help">Una imagen cuadrada se ve mejor.</p>
+        </div>
+      </div>
+      <div class="g2">
+        <div class="f"><label for="colorPrincipal">Color principal</label><div class="color-in"><input type="color" id="colorPrincipal"><input type="text" id="colorPrincipalTxt" maxlength="7"></div>
+          <div class="colors" id="swP"></div></div>
+        <div class="f"><label for="colorFondo">Color de fondo</label><div class="color-in"><input type="color" id="colorFondo"><input type="text" id="colorFondoTxt" maxlength="7"></div>
+          <div class="colors" id="swB"></div></div>
+      </div>
+    </section>
+
+    <!-- Servicios -->
+    <section class="card">
+      <h2>Servicios y precios</h2>
+      <p class="sub">Si un precio queda en 0, no se muestra esa moneda.</p>
+      <div id="svcList"></div>
+      <button class="btn btn-line" id="addSvc">+ Añadir servicio</button>
+    </section>
+
+    <!-- Horario -->
+    <section class="card">
+      <h2>Días y horario de trabajo</h2>
+      <div class="days" id="daysBox"></div>
+      <div class="g3" style="margin-top:14px">
+        <div class="f"><label for="intervalo">Citas cada</label><select id="intervalo"><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">1 hora</option></select></div>
+        <div class="f"><label for="diasAdelanto">Reservar hasta</label><select id="diasAdelanto"><option value="7">1 semana</option><option value="14">2 semanas</option><option value="30">1 mes</option><option value="60">2 meses</option></select></div>
+        <div class="f"><label for="aviso">Aviso mínimo</label><select id="aviso"><option value="0">Sin mínimo</option><option value="1">1 hora</option><option value="2">2 horas</option><option value="4">4 horas</option><option value="12">12 horas</option><option value="24">1 día</option></select></div>
+      </div>
+      <label for="closedIn">Días cerrados (vacaciones, feriados)</label>
+      <div style="display:flex;gap:8px"><input type="date" id="closedIn"><button class="btn btn-line btn-sm" id="closedAdd">Añadir</button></div>
+      <div class="chips" id="closedList"></div>
+    </section>
+  </div>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <span class="msg" id="msg"></span>
+    <button class="btn btn-line" id="preview">Vista previa</button>
+    <button class="btn" id="save">Guardar</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var DAYS=[["1","Lunes"],["2","Martes"],["3","Miércoles"],["4","Jueves"],["5","Viernes"],["6","Sábado"],["0","Domingo"]];
+  var PRIMARY=["#b0476b","#c2185b","#8e44ad","#d35400","#16a085","#2c3e50","#b8860b"];
+  var BACKS=["#fbf6f3","#ffffff","#fdf2f6","#f5f0fa","#f2f7f5","#fff8ef"];
+  var LS_CONN="reservas-conexion",LS_DRAFT="reservas-borrador";
+  var cfg=null,sha=null,conn=null,offline=false,newLogo=null,dirty=false;
+
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+  function setMsg(t,cls){var m=$("msg");m.textContent=t||"";m.className="msg"+(cls?" "+cls:"");}
+  function markDirty(){dirty=true;setMsg("Cambios sin guardar");}
+
+  // ---- utf8 base64 ----
+  function b64encode(str){var bytes=new TextEncoder().encode(str),bin="";for(var i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));return btoa(bin);}
+  function b64decode(b64){var bin=atob(String(b64).replace(/\s/g,"")),bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder().decode(bytes);}
+
+  // ---- GitHub API ----
+  function api(path,opts){
+    opts=opts||{};
+    return fetch("https://api.github.com/repos/"+encodeURIComponent(conn.owner)+"/"+encodeURIComponent(conn.repo)+"/contents/"+path+(opts.method?"":"?t="+Date.now()),{
+      method:opts.method||"GET",
+      headers:{"Authorization":"Bearer "+conn.token,"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"},
+      body:opts.body?JSON.stringify(opts.body):undefined,cache:"no-store"
+    }).then(function(r){
+      if(r.status===404&&opts.allow404)return null;
+      if(!r.ok)return r.text().then(function(){var e=new Error(apiErr(r.status));e.status=r.status;throw e;});
+      return r.json();
+    });
+  }
+  function apiErr(s){
+    if(s===401)return"La clave (token) no es válida o ha caducado.";
+    if(s===403)return"La clave no tiene permiso para escribir. Revisa que tenga Contents: Read and write.";
+    if(s===404)return"No se encontró el repositorio o la clave no tiene acceso a él.";
+    if(s===409)return"Hubo un conflicto con otro cambio. Recarga la página e inténtalo otra vez.";
+    if(s===422)return"GitHub rechazó el cambio. Recarga la página e inténtalo otra vez.";
+    return"Error de conexión con GitHub ("+s+").";
+  }
+
+  // ---- connection ----
+  function guessRepo(){
+    var h=location.hostname,m=h.match(/^([^.]+)\.github\.io$/i);
+    if(!m)return;
+    if(!$("owner").value)$("owner").value=m[1];
+    var seg=location.pathname.split("/").filter(Boolean)[0];
+    if(!$("repo").value)$("repo").value=(seg&&!/\.html$/i.test(seg))?seg:h;
+  }
+  function connect(){
+    conn={owner:$("owner").value.trim(),repo:$("repo").value.trim(),token:$("token").value.trim()};
+    var st=$("connStatus");
+    if(!conn.owner||!conn.repo||!conn.token){st.className="status bad";st.textContent="Completa los tres campos.";return;}
+    st.className="status";st.textContent="Conectando…";$("connect").disabled=true;
+    api("config.json").then(function(j){
+      sha=j.sha;cfg=normalize(JSON.parse(b64decode(j.content)));
+      if($("remember").checked)lsSet(LS_CONN,JSON.stringify(conn));
+      offline=false;openEditor();
+    }).catch(function(e){st.className="status bad";st.textContent=e.message||"No se pudo conectar.";conn=null;})
+      .then(function(){$("connect").disabled=false;});
+  }
+  function goOffline(){
+    offline=true;conn=null;
+    fetch("config.json?v="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.json():{};}).catch(function(){return{};})
+      .then(function(c){cfg=normalize(c);openEditor();});
+  }
+  function openEditor(){
+    $("connCard").hidden=true;$("connInfo").hidden=false;$("editor").hidden=false;$("bar").hidden=false;
+    $("connLabel").textContent=offline?"Modo sin conexión: al guardar se descarga config.json para subirlo a mano.":"✓ Conectada a "+conn.owner+"/"+conn.repo;
+    $("save").textContent=offline?"Descargar":"Guardar";
+    fill();setMsg("");dirty=false;
+  }
+  function disconnect(){
+    if(dirty&&!confirmLeave())return;
+    lsDel(LS_CONN);conn=null;cfg=null;sha=null;offline=false;newLogo=null;
+    $("token").value="";$("connCard").hidden=false;$("connInfo").hidden=true;$("editor").hidden=true;$("bar").hidden=true;$("connStatus").textContent="";
+  }
+  function confirmLeave(){return window.confirm("Tienes cambios sin guardar. ¿Salir de todos modos?");}
+
+  // ---- model ----
+  function normalize(c){
+    c=c&&typeof c==="object"?c:{};
+    var n=c.negocio=c.negocio||{};
+    n.nombre=n.nombre||"";n.eslogan=n.eslogan||"";n.logo=n.logo||"";n.colorPrincipal=n.colorPrincipal||"#b0476b";n.colorFondo=n.colorFondo||"#fbf6f3";
+    n.whatsapp=n.whatsapp||"";n.direccion=n.direccion||"";n.mostrarDireccion=!!n.mostrarDireccion;n.aDomicilio=!!n.aDomicilio;n.moneda=n.moneda||"CUP";n.nota=n.nota||"";
+    c.servicios=Array.isArray(c.servicios)?c.servicios:[];
+    var h=c.horario=c.horario||{};h.dias=h.dias||{};
+    DAYS.forEach(function(d){h.dias[d[0]]=h.dias[d[0]]||{abierto:false,inicio:"09:00",fin:"18:00"};});
+    h.intervalo=Number(h.intervalo)||30;h.diasAdelanto=Number(h.diasAdelanto)||30;h.avisoMinimoHoras=h.avisoMinimoHoras==null?2:Number(h.avisoMinimoHoras);
+    h.diasCerrados=Array.isArray(h.diasCerrados)?h.diasCerrados:[];
+    return c;
+  }
+  function setSel(id,val){var s=$(id),v=String(val);if(![].some.call(s.options,function(o){return o.value===v;})){var o=document.createElement("option");o.value=v;o.textContent=v;s.appendChild(o);}s.value=v;}
+
+  function fill(){
+    var n=cfg.negocio,h=cfg.horario;
+    ["nombre","eslogan","whatsapp","direccion","nota"].forEach(function(k){$(k).value=n[k];});
+    $("mostrarDireccion").checked=n.mostrarDireccion;$("aDomicilio").checked=n.aDomicilio;$("moneda").value=n.moneda;
+    setColor("colorPrincipal",n.colorPrincipal);setColor("colorFondo",n.colorFondo);
+    renderLogo();renderSvcs();renderDays();
+    setSel("intervalo",h.intervalo);setSel("diasAdelanto",h.diasAdelanto);setSel("aviso",h.avisoMinimoHoras);
+    renderClosed();
+  }
+  function collect(){
+    var n=cfg.negocio,h=cfg.horario;
+    ["nombre","eslogan","whatsapp","direccion","nota"].forEach(function(k){n[k]=$(k).value.trim();});
+    n.mostrarDireccion=$("mostrarDireccion").checked;n.aDomicilio=$("aDomicilio").checked;n.moneda=$("moneda").value;
+    n.colorPrincipal=$("colorPrincipal").value;n.colorFondo=$("colorFondo").value;
+    h.intervalo=+$("intervalo").value;h.diasAdelanto=+$("diasAdelanto").value;h.avisoMinimoHoras=+$("aviso").value;
+    cfg.servicios=[].map.call(document.querySelectorAll("#svcList .svc"),function(el){
+      function v(s){return el.querySelector(s).value;}
+      return{nombre:v(".s-n").trim(),descripcion:v(".s-d").trim(),precioCUP:Number(v(".s-cup"))||0,precioUSD:Number(v(".s-usd"))||0,duracion:Number(v(".s-dur"))||30};
+    }).filter(function(s){return s.nombre;});
+    DAYS.forEach(function(d){var row=document.querySelector('.row[data-d="'+d[0]+'"]');h.dias[d[0]]={abierto:row.querySelector(".d-on").checked,inicio:row.querySelector(".d-i").value||"09:00",fin:row.querySelector(".d-f").value||"18:00"};});
+    return cfg;
+  }
+
+  // ---- colors ----
+  function validHex(s){return/^#[0-9a-f]{6}$/i.test(s);}
+  function setColor(id,val){if(!validHex(val))return;$(id).value=val.toLowerCase();$(id+"Txt").value=val.toLowerCase();}
+  function swatches(box,list,id){
+    $(box).innerHTML=list.map(function(c){return'<button type="button" class="sw" style="background:'+c+'" data-c="'+c+'" aria-label="Color '+c+'"></button>';}).join("");
+    $(box).addEventListener("click",function(e){var b=e.target.closest(".sw");if(!b)return;setColor(id,b.dataset.c);markDirty();});
+  }
+
+  // ---- logo ----
+  function renderLogo(){
+    var src=newLogo?newLogo.dataUrl:(cfg.negocio.logo?logoUrl(cfg.negocio.logo):"");
+    $("logoPrev").innerHTML=src?'<img src="'+esc(src)+'" alt="" style="width:100%;height:100%;object-fit:cover">':"Sin logo";
+    $("logoDel").hidden=!src;
+  }
+  function logoUrl(p){return/^(https?:|data:)/.test(p)?p:p;}
+  function pickLogo(file){
+    if(!file)return;
+    var img=new Image(),url=URL.createObjectURL(file);
+    img.onload=function(){
+      var s=Math.min(512,Math.max(img.width,img.height)),c=document.createElement("canvas");
+      var side=Math.min(img.width,img.height);c.width=c.height=Math.min(512,side);
+      var ctx=c.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,c.width,c.height);
+      ctx.drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,c.width,c.height);
+      var dataUrl=c.toDataURL("image/jpeg",0.88);
+      newLogo={dataUrl:dataUrl,b64:dataUrl.split(",")[1]};
+      URL.revokeObjectURL(url);renderLogo();markDirty();
+    };
+    img.onerror=function(){setMsg("No se pudo leer esa imagen.","bad");};
+    img.src=url;
+  }
+
+  // ---- services ----
+  function svcHtml(s,i,total){
+    return'<div class="svc"><div class="svc-top"><span class="idx">Servicio '+(i+1)+'</span>'+
+      '<button type="button" class="btn btn-line btn-sm s-up" '+(i===0?"disabled":"")+' aria-label="Subir">↑</button>'+
+      '<button type="button" class="btn btn-line btn-sm s-down" '+(i===total-1?"disabled":"")+' aria-label="Bajar">↓</button>'+
+      '<button type="button" class="btn btn-x btn-sm s-del">Eliminar</button></div>'+
+      '<div class="f"><label>Nombre</label><input type="text" class="s-n" value="'+esc(s.nombre)+'" placeholder="Ej.: Manicura en gel"></div>'+
+      '<div class="f"><label>Descripción (opcional)</label><input type="text" class="s-d" value="'+esc(s.descripcion||"")+'"></div>'+
+      '<div class="g3"><div class="f"><label>Precio CUP</label><input type="number" min="0" step="1" inputmode="decimal" class="s-cup" value="'+(Number(s.precioCUP)||0)+'"></div>'+
+      '<div class="f"><label>Precio USD</label><input type="number" min="0" step="0.5" inputmode="decimal" class="s-usd" value="'+(Number(s.precioUSD)||0)+'"></div>'+
+      '<div class="f"><label>Duración (min)</label><input type="number" min="5" step="5" inputmode="numeric" class="s-dur" value="'+(Number(s.duracion)||30)+'"></div></div></div>';
+  }
+  function renderSvcs(){var l=cfg.servicios;$("svcList").innerHTML=l.map(function(s,i){return svcHtml(s,i,l.length);}).join("")||'<p class="help" style="margin:0 0 12px">Aún no hay servicios.</p>';}
+  function svcAction(e){
+    var b=e.target.closest("button");if(!b)return;
+    var els=[].slice.call(document.querySelectorAll("#svcList .svc")),i=els.indexOf(b.closest(".svc"));
+    var list=els.map(function(el){function v(s){return el.querySelector(s).value;}return{nombre:v(".s-n"),descripcion:v(".s-d"),precioCUP:v(".s-cup"),precioUSD:v(".s-usd"),duracion:v(".s-dur")};});
+    if(b.classList.contains("s-del")){if(!window.confirm("¿Eliminar este servicio?"))return;list.splice(i,1);}
+    else if(b.classList.contains("s-up")&&i>0){list.splice(i-1,0,list.splice(i,1)[0]);}
+    else if(b.classList.contains("s-down")&&i<list.length-1){list.splice(i+1,0,list.splice(i,1)[0]);}
+    else return;
+    cfg.servicios=list;renderSvcs();markDirty();
+  }
+
+  // ---- days ----
+  function renderDays(){
+    $("daysBox").innerHTML=DAYS.map(function(d){var c=cfg.horario.dias[d[0]];
+      return'<div class="row'+(c.abierto?"":" off")+'" data-d="'+d[0]+'"><label class="chk"><input type="checkbox" class="d-on" '+(c.abierto?"checked":"")+'> '+d[1]+'</label>'+
+        '<input type="time" class="d-i" value="'+esc(c.inicio)+'" aria-label="'+d[1]+' desde"><input type="time" class="d-f" value="'+esc(c.fin)+'" aria-label="'+d[1]+' hasta"></div>';}).join("");
+  }
+  function renderClosed(){
+    var l=cfg.horario.diasCerrados.slice().sort();cfg.horario.diasCerrados=l;
+    $("closedList").innerHTML=l.map(function(d){var p=d.split("-"),dt=new Date(+p[0],+p[1]-1,+p[2]);return'<span class="chip">'+esc(dt.toLocaleDateString("es-ES",{weekday:"short",day:"numeric",month:"short",year:"numeric"}))+'<button type="button" data-d="'+esc(d)+'" aria-label="Quitar">×</button></span>';}).join("");
+  }
+
+  // ---- validate & save ----
+  function validate(c){
+    if(!c.negocio.nombre)return"Escribe el nombre del negocio.";
+    var w=c.negocio.whatsapp.replace(/\D/g,"");
+    if(w.length<8)return"Revisa el número de WhatsApp (con +53 delante).";
+    if(!c.servicios.length)return"Añade al menos un servicio.";
+    for(var k in c.horario.dias){var d=c.horario.dias[k];if(d.abierto&&d.inicio>=d.fin)return"Revisa el horario: la hora de cierre debe ser después de la de apertura.";}
+    return null;
+  }
+  function save(){
+    var c=collect(),err=validate(c);
+    if(err){setMsg(err,"bad");return;}
+    if(offline){
+      if(newLogo){c.negocio.logo="logo.jpg";downloadData("logo.jpg",newLogo.dataUrl);}
+      downloadData("config.json","data:application/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(c,null,2)));
+      setMsg(newLogo?"Descargados config.json y logo.jpg. Súbelos a tu repositorio.":"Descargado config.json. Súbelo a tu repositorio.","ok");dirty=false;return;
+    }
+    $("save").disabled=true;setMsg("Guardando…");
+    var p=Promise.resolve();
+    if(newLogo){
+      p=api("logo.jpg",{allow404:true}).then(function(existing){
+        return api("logo.jpg",{method:"PUT",body:{message:"Actualizar logo",content:newLogo.b64,sha:existing?existing.sha:undefined}});
+      }).then(function(){c.negocio.logo="logo.jpg?v="+Date.now();});
+    }
+    p.then(function(){
+      return api("config.json",{method:"PUT",body:{message:"Actualizar configuración desde el panel",content:b64encode(JSON.stringify(c,null,2)+"\n"),sha:sha}});
+    }).then(function(r){
+      sha=r.content.sha;newLogo=null;dirty=false;renderLogo();
+      setMsg("✓ Guardado. Tu página se actualiza en 1 o 2 minutos.","ok");
+    }).catch(function(e){setMsg(e.message||"No se pudo guardar.","bad");})
+      .then(function(){$("save").disabled=false;});
+  }
+  function downloadData(name,href){var a=document.createElement("a");a.href=href;a.download=name;document.body.appendChild(a);a.click();a.remove();}
+  function preview(){
+    var c=JSON.parse(JSON.stringify(collect()));
+    if(newLogo)c.negocio.logo=newLogo.dataUrl;
+    lsSet(LS_DRAFT,JSON.stringify(c));
+    window.open("index.html?preview=1","_blank");
+  }
+
+  // ---- events ----
+  swatches("swP",PRIMARY,"colorPrincipal");swatches("swB",BACKS,"colorFondo");
+  $("connect").addEventListener("click",connect);
+  $("offline").addEventListener("click",goOffline);
+  $("disconnect").addEventListener("click",disconnect);
+  $("token").addEventListener("keydown",function(e){if(e.key==="Enter")connect();});
+  $("editor").addEventListener("input",function(e){
+    var t=e.target;
+    if(t.id==="colorPrincipalTxt"||t.id==="colorFondoTxt"){if(validHex(t.value))$(t.id.replace("Txt","")).value=t.value;}
+    if(t.id==="colorPrincipal"||t.id==="colorFondo")$(t.id+"Txt").value=t.value;
+    if(t.classList.contains("d-on"))t.closest(".row").classList.toggle("off",!t.checked);
+    markDirty();
+  });
+  $("editor").addEventListener("change",function(e){if(e.target.classList.contains("d-on"))e.target.closest(".row").classList.toggle("off",!e.target.checked);markDirty();});
+  $("svcList").addEventListener("click",svcAction);
+  $("addSvc").addEventListener("click",function(){
+    collect();cfg.servicios.push({nombre:"",descripcion:"",precioCUP:0,precioUSD:0,duracion:30});renderSvcs();markDirty();
+    var all=document.querySelectorAll("#svcList .s-n");all[all.length-1].focus();
+  });
+  $("logoPick").addEventListener("click",function(){$("logoFile").click();});
+  $("logoFile").addEventListener("change",function(){pickLogo(this.files[0]);this.value="";});
+  $("logoDel").addEventListener("click",function(){newLogo=null;cfg.negocio.logo="";renderLogo();markDirty();});
+  $("closedAdd").addEventListener("click",function(){var v=$("closedIn").value;if(v&&cfg.horario.diasCerrados.indexOf(v)<0){cfg.horario.diasCerrados.push(v);renderClosed();markDirty();}$("closedIn").value="";});
+  $("closedList").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;cfg.horario.diasCerrados=cfg.horario.diasCerrados.filter(function(d){return d!==b.dataset.d;});renderClosed();markDirty();});
+  $("save").addEventListener("click",save);
+  $("preview").addEventListener("click",preview);
+  window.addEventListener("beforeunload",function(e){if(dirty){e.preventDefault();e.returnValue="";}});
+
+  // ---- start ----
+  var saved=null;try{saved=JSON.parse(lsGet(LS_CONN)||"null");}catch(e){}
+  if(saved&&saved.owner&&saved.repo&&saved.token){$("owner").value=saved.owner;$("repo").value=saved.repo;$("token").value=saved.token;connect();}
+  else guessRepo();
+})();
+</script>
+</body>
+</html>
