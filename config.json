@@ -54,6 +54,34 @@
       "precioCUP": 2000,
       "precioUSD": 0,
       "duracion": 30
+    },
+    {
+      "nombre": "Retoque",
+      "descripcion": "Cortas 1-3",
+      "precioCUP": 1200,
+      "precioUSD": 0,
+      "duracion": 30
+    },
+    {
+      "nombre": "Retoque",
+      "descripcion": "Medianas 4-6",
+      "precioCUP": 1500,
+      "precioUSD": 0,
+      "duracion": 30
+    },
+    {
+      "nombre": "Retoque",
+      "descripcion": "Largas 7-9",
+      "precioCUP": 1800,
+      "precioUSD": 0,
+      "duracion": 30
+    },
+    {
+      "nombre": "Retoque",
+      "descripcion": "Relleno ajeno",
+      "precioCUP": 300,
+      "precioUSD": 0,
+      "duracion": 30
     }
   ],
   "horario": {
