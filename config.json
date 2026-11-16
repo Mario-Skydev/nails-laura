@@ -33,6 +33,27 @@
       "precioCUP": 3000,
       "precioUSD": 0,
       "duracion": 60
+    },
+    {
+      "nombre": "Press On",
+      "descripcion": "Cortas 1-3",
+      "precioCUP": 1500,
+      "precioUSD": 0,
+      "duracion": 30
+    },
+    {
+      "nombre": "Press On",
+      "descripcion": "Medianas 4-6",
+      "precioCUP": 1800,
+      "precioUSD": 0,
+      "duracion": 30
+    },
+    {
+      "nombre": "Press On",
+      "descripcion": "Largas 7-9",
+      "precioCUP": 2000,
+      "precioUSD": 0,
+      "duracion": 30
     }
   ],
   "horario": {
