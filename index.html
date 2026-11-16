@@ -52,12 +52,31 @@
 
   /* Servicios */
   .services{display:grid;gap:10px}
-  .svc{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:border-color .15s,background .15s}
-  .svc:hover{border-color:var(--p)}
-  .svc[aria-pressed="true"]{border-color:var(--p);background:var(--p-softer)}
+  .svc-item{background:#fff;border:1.5px solid var(--line);border-radius:12px;transition:border-color .15s,background .15s}
+  .svc-item:hover{border-color:var(--p)}
+  .svc-item.on{border-color:var(--p);background:var(--p-softer)}
+  .svc{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:transparent;border:0;border-radius:12px;padding:14px;cursor:pointer}
+  .svc-cat{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--p-dark);font-weight:600;margin-bottom:1px}
+  .qty{display:flex;align-items:center;gap:10px;padding:0 14px 12px 48px;font-size:14px;color:var(--muted)}
+  .qty button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--p);background:#fff;color:var(--p-dark);font-size:18px;line-height:1;cursor:pointer}
+  .qty button:disabled{opacity:.35;cursor:not-allowed}
+  .qty b{min-width:20px;text-align:center;color:var(--ink);font-size:16px}
+  .cats{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin:0 -2px 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .cats::-webkit-scrollbar{display:none}
+  .cat{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer;white-space:nowrap}
+  .cat[aria-pressed="true"]{background:var(--p);border-color:var(--p);color:#fff;font-weight:600}
+  .cat .n{display:inline-block;min-width:18px;height:18px;border-radius:9px;background:var(--p);color:#fff;font-size:11px;line-height:18px;text-align:center;margin-left:6px;padding:0 4px}
+  .cat[aria-pressed="true"] .n{background:#fff;color:var(--p-dark)}
+  .pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+  .pager button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 14px;cursor:pointer;font-weight:600;color:var(--p-dark)}
+  .pager button:disabled{opacity:.35;cursor:not-allowed}
+  .pager span{font-size:14px;color:var(--muted)}
+  .sum-list{margin:2px 0 0;padding:0;list-style:none}
+  .sum-list li{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+  .sum-list li span:last-child{color:var(--muted);white-space:nowrap;font-size:14px}
   .check{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--line);flex:none;margin-top:2px;display:flex;align-items:center;justify-content:center;background:#fff}
-  .svc[aria-pressed="true"] .check{background:var(--p);border-color:var(--p)}
-  .svc[aria-pressed="true"] .check::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .svc-item.on .check{background:var(--p);border-color:var(--p)}
+  .svc-item.on .check::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
   .svc-body{flex:1;min-width:0}
   .svc-name{font-weight:600}
   .svc-desc{color:var(--muted);font-size:14px}
@@ -139,7 +158,8 @@
   var CAL_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
   var VIEWS=["servicios","fecha","confirmar"];
 
-  var cfg, state={sel:[],day:null,time:null,name:"",note:"",sent:false};
+  var cfg, state={sel:[],qty:{},cat:"",page:0,day:null,time:null,name:"",note:"",sent:false};
+  var PER_PAGE=6;
 
   // ---------- utilidades ----------
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -155,12 +175,19 @@
     r.setProperty("--bg",bg);r.setProperty("--line",mix(p,"#ffffff",.86));
   }
   function fmtNum(n){return Number(n).toLocaleString("es-ES",{maximumFractionDigits:2,useGrouping:true}).replace(/\./g," ");}
-  function priceText(cup,usd){
-    var m=cfg.negocio.moneda||"CUP",parts=[];
-    if((m==="CUP"||m==="ambas")&&Number(cup)>0)parts.push(fmtNum(cup)+" CUP");
-    if((m==="USD"||m==="ambas")&&Number(usd)>0)parts.push(fmtNum(usd)+" USD");
+  function money(a,b,cur){a=Number(a)||0;b=Number(b)||0;if(a<=0&&b<=0)return"";if(b>a)return fmtNum(a)+"–"+fmtNum(b)+" "+cur;return fmtNum(Math.max(a,b))+" "+cur;}
+  function priceText(cup,usd,cupMax,usdMax){
+    var m=cfg.negocio.moneda||"CUP",parts=[],a;
+    if((m==="CUP"||m==="ambas")&&(a=money(cup,cupMax,"CUP")))parts.push(a);
+    if((m==="USD"||m==="ambas")&&(a=money(usd,usdMax,"USD")))parts.push(a);
     return parts.join(" · ")||"Consultar";
   }
+  function svcPrice(s){var t=priceText(s.precioCUP,s.precioUSD,s.precioMaxCUP,s.precioMaxUSD);return s.unidad&&t!=="Consultar"?t+" "+s.unidad:t;}
+  function catOf(s){return String(s.categoria||"").trim();}
+  function qtyOf(i){var s=cfg.servicios[i];return s&&s.cantidad?(state.qty[i]||1):1;}
+  function label(i){var s=cfg.servicios[i],c=catOf(s),q=qtyOf(i);return(c?c+" – ":"")+s.nombre+(q>1?" ×"+q:"");}
+  function itemPrice(i){var s=cfg.servicios[i],q=qtyOf(i);function hi(a,b){a=Number(a)||0;b=Number(b)||0;return Math.max(a,b);}return priceText((Number(s.precioCUP)||0)*q,(Number(s.precioUSD)||0)*q,hi(s.precioCUP,s.precioMaxCUP)*q,hi(s.precioUSD,s.precioMaxUSD)*q);}
+  function totalText(t){return priceText(t.cup,t.usd,t.cupMax,t.usdMax);}
   function durText(min){min=Number(min)||0;var h=Math.floor(min/60),m=min%60;return(h?h+" h":"")+(h&&m?" ":"")+(m?m+" min":"")||"—";}
   function toMin(t){var p=String(t||"0:0").split(":");return(+p[0])*60+(+p[1]||0);}
   function fmtTime(min){var d=new Date(2000,0,1,Math.floor(min/60),min%60);return d.toLocaleTimeString("es-ES",{hour:"numeric",minute:"2-digit",hour12:true}).replace(/\s?a\.?\s?m\.?/i,"\u00a0a.\u00a0m.").replace(/\s?p\.?\s?m\.?/i,"\u00a0p.\u00a0m.");}
@@ -169,8 +196,19 @@
   function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
   function longDate(d){return cap(d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"}));}
   function shortDate(d){return cap(d.toLocaleDateString("es-ES",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,""));}
-  function totals(){var dur=0,cup=0,usd=0;state.sel.forEach(function(i){var s=cfg.servicios[i];dur+=Number(s.duracion)||0;cup+=Number(s.precioCUP)||0;usd+=Number(s.precioUSD)||0;});return{dur:dur,cup:cup,usd:usd};}
-  function selNames(){return state.sel.map(function(i){return cfg.servicios[i].nombre;});}
+  function totals(){
+    var t={dur:0,cup:0,usd:0,cupMax:0,usdMax:0,consultar:false};
+    state.sel.forEach(function(i){
+      var s=cfg.servicios[i],q=qtyOf(i),c=Number(s.precioCUP)||0,u=Number(s.precioUSD)||0;
+      t.dur+=(Number(s.duracion)||0)*q;t.cup+=c*q;t.usd+=u*q;
+      t.cupMax+=Math.max(c,Number(s.precioMaxCUP)||0)*q;t.usdMax+=Math.max(u,Number(s.precioMaxUSD)||0)*q;
+      if(svcPrice(s)==="Consultar")t.consultar=true;
+    });
+    t.aprox=t.cupMax>t.cup||t.usdMax>t.usd||t.consultar;
+    return t;
+  }
+  function selNames(){return state.sel.map(label);}
+  function countText(){var n=state.sel.reduce(function(a,i){return a+qtyOf(i);},0);return state.sel.length+" servicio"+(state.sel.length>1?"s":"");}
   function dayCfg(d){var h=cfg.horario;if((h.diasCerrados||[]).indexOf(ymd(d))>=0)return null;var c=h.dias[String(d.getDay())];return c&&c.abierto?c:null;}
   function slotsFor(d){
     var c=dayCfg(d);if(!c)return[];
@@ -221,18 +259,39 @@
     var n=cfg.negocio,meta=[];
     if(n.mostrarDireccion&&n.direccion)meta.push('<span class="pill">📍 '+esc(n.direccion)+'</span>');
     if(n.aDomicilio)meta.push('<span class="pill">🏠 Servicio a domicilio</span>');
-    var svcs=cfg.servicios.map(function(s,i){
-      var on=state.sel.indexOf(i)>=0;
-      return'<button type="button" class="svc" data-i="'+i+'" aria-pressed="'+on+'"><span class="check"></span><span class="svc-body"><span class="svc-name">'+esc(s.nombre)+'</span>'+(s.descripcion?'<br><span class="svc-desc">'+esc(s.descripcion)+'</span>':'')+'</span><span class="svc-side"><span class="price">'+esc(priceText(s.precioCUP,s.precioUSD))+'</span><br><span class="dur">'+esc(durText(s.duracion))+'</span></span></button>';
-    }).join("");
     return'<header class="hero">'+logoHtml()+'<h1>'+esc(n.nombre)+'</h1>'+(n.eslogan?'<p class="tagline">'+esc(n.eslogan)+'</p>':'')+(meta.length?'<div class="meta">'+meta.join("")+'</div>':'')+'</header>'+
       '<div class="view">'+stepper(0)+'<div class="vhead"><h2>¿Qué te hacemos hoy?</h2></div><p class="lead">Elige uno o varios servicios.</p>'+
-      '<div class="services" id="svcs">'+(svcs||'<p class="empty">Aún no hay servicios publicados.</p>')+'</div>'+
+      '<div id="svcArea">'+svcAreaHtml()+'</div>'+
       '<button type="button" class="linkbtn" data-go="cancelar">¿Necesitas cancelar o cambiar una cita?</button></div>'+
       '<footer>'+esc(n.nombre)+' · WhatsApp '+esc(n.whatsapp)+'</footer>';
   }
+  function categories(){var out=[];cfg.servicios.forEach(function(s){var c=catOf(s);if(c&&out.indexOf(c)<0)out.push(c);});return out;}
+  function svcItem(s,i,showCat){
+    var on=state.sel.indexOf(i)>=0,q=qtyOf(i),c=catOf(s);
+    var qty=on&&s.cantidad?'<div class="qty"><span>Cantidad'+(s.unidad?' ('+esc(s.unidad)+')':'')+'</span><button type="button" data-q="-1" data-i="'+i+'" aria-label="Menos" '+(q<=1?"disabled":"")+'>−</button><b>'+q+'</b><button type="button" data-q="1" data-i="'+i+'" aria-label="Más" '+(q>=20?"disabled":"")+'>+</button></div>':'';
+    return'<div class="svc-item'+(on?" on":"")+'"><button type="button" class="svc" data-i="'+i+'" aria-pressed="'+on+'"><span class="check"></span><span class="svc-body">'+(showCat&&c?'<span class="svc-cat">'+esc(c)+'</span>':'')+'<span class="svc-name">'+esc(s.nombre)+'</span>'+(s.descripcion?'<br><span class="svc-desc">'+esc(s.descripcion)+'</span>':'')+'</span><span class="svc-side"><span class="price">'+esc(svcPrice(s))+'</span><br><span class="dur">'+esc(durText(s.duracion))+'</span></span></button>'+qty+'</div>';
+  }
+  function svcAreaHtml(){
+    var cats=categories(),list=[];
+    if(state.cat&&cats.indexOf(state.cat)<0)state.cat="";
+    cfg.servicios.forEach(function(s,i){if(!state.cat||catOf(s)===state.cat)list.push(i);});
+    var pages=Math.max(1,Math.ceil(list.length/PER_PAGE));
+    if(state.page>=pages)state.page=pages-1;
+    var slice=list.slice(state.page*PER_PAGE,state.page*PER_PAGE+PER_PAGE);
+    function nSel(c){return state.sel.filter(function(i){return !c||catOf(cfg.servicios[i])===c;}).length;}
+    var chips=cats.length>1?'<div class="cats" id="cats">'+[""].concat(cats).map(function(c){var n=nSel(c);return'<button type="button" class="cat" data-cat="'+esc(c)+'" aria-pressed="'+(state.cat===c)+'">'+(c?esc(c):"Todos")+(n?'<span class="n">'+n+'</span>':'')+'</button>';}).join("")+'</div>':'';
+    var items=slice.map(function(i){return svcItem(cfg.servicios[i],i,!state.cat);}).join("");
+    var pager=pages>1?'<div class="pager"><button type="button" data-page="-1" '+(state.page===0?"disabled":"")+'>‹ Anterior</button><span>Página '+(state.page+1)+' de '+pages+'</span><button type="button" data-page="1" '+(state.page>=pages-1?"disabled":"")+'>Siguiente ›</button></div>':'';
+    return chips+'<div class="services" id="svcs">'+(items||'<p class="empty">Aún no hay servicios publicados.</p>')+'</div>'+pager;
+  }
+  function refreshSvcs(scroll){
+    $("svcArea").innerHTML=svcAreaHtml();
+    var a=document.querySelector('.cat[aria-pressed="true"]');if(a&&a.scrollIntoView)a.scrollIntoView({inline:"nearest",block:"nearest"});
+    if(scroll){var top=$("svcArea").getBoundingClientRect().top+window.pageYOffset-12;if(window.pageYOffset>top)window.scrollTo(0,top);}
+    updateBar("servicios");
+  }
   function viewFecha(){
-    return brandbar()+'<div class="view">'+stepper(1)+'<div class="vhead">'+backBtn("servicios")+'</div><div class="vhead"><h2>Elige día y hora</h2></div><p class="lead">'+esc(selNames().join(", "))+' · '+esc(durText(totals().dur))+'</p>'+
+    return brandbar()+'<div class="view">'+stepper(1)+'<div class="vhead">'+backBtn("servicios")+'</div><div class="vhead"><h2>Elige día y hora</h2></div><p class="lead">'+esc(countText())+' · '+esc(durText(totals().dur))+'</p>'+
       '<div class="card"><h3>Día</h3><p class="month" id="month"></p><div class="days" id="days"></div></div>'+
       '<div class="card"><h3>Hora</h3><div class="times" id="times"></div></div></div>';
   }
@@ -246,10 +305,11 @@
     }
     return brandbar()+'<div class="view">'+stepper(2)+'<div class="vhead">'+backBtn("fecha")+'</div><div class="vhead"><h2>Confirma tu cita</h2></div><p class="lead">Revisa los datos y envía tu reserva por WhatsApp.</p>'+
       '<div class="card">'+
-        '<div class="sum-row"><div><div class="sum-k">Servicios</div><div class="sum-v">'+esc(selNames().join(", "))+'</div></div><button type="button" class="sum-edit" data-go="servicios">Cambiar</button></div>'+
+        '<div class="sum-row"><div style="flex:1;min-width:0"><div class="sum-k">Servicios</div><ul class="sum-list sum-v">'+state.sel.map(function(i){return'<li><span>'+esc(label(i))+'</span><span>'+esc(itemPrice(i))+'</span></li>';}).join("")+'</ul></div><button type="button" class="sum-edit" data-go="servicios">Cambiar</button></div>'+
         '<div class="sum-row"><div><div class="sum-k">Día y hora</div><div class="sum-v">'+esc(longDate(d))+', '+esc(fmtTime(state.time))+'</div></div><button type="button" class="sum-edit" data-go="fecha">Cambiar</button></div>'+
         '<div class="sum-row"><div><div class="sum-k">Duración aproximada</div><div class="sum-v">'+esc(durText(t.dur))+'</div></div></div>'+
-        '<div class="total"><span>Total</span><span>'+esc(priceText(t.cup,t.usd))+'</span></div>'+
+        '<div class="total"><span>'+(t.aprox?"Total aprox.":"Total")+'</span><span>'+esc(totalText(t))+'</span></div>'+
+        (t.aprox?'<p class="sum-k" style="margin:6px 0 0">El precio final se confirma por WhatsApp según el largo y el diseño.</p>':'')+
       '</div>'+
       '<div class="card"><div class="field"><label for="nm">Tu nombre</label><input type="text" id="nm" autocomplete="name" placeholder="Ej.: Ana Pérez" value="'+esc(state.name)+'"></div>'+
         '<div class="field"><label for="nt">Nota (opcional)</label><textarea id="nt" placeholder="Diseño que te gustaría, alergias, etc.">'+esc(state.note)+'</textarea></div></div>'+
@@ -295,7 +355,7 @@
     bar.hidden=!show;document.body.classList.toggle("has-bar",show);
     if(!show)return;
     if(v==="servicios"){
-      info.innerHTML='<b>'+state.sel.length+' servicio'+(state.sel.length>1?"s":"")+' · '+esc(durText(t.dur))+'</b><span>'+esc(priceText(t.cup,t.usd))+'</span>';
+      info.innerHTML='<b>'+esc(countText())+' · '+esc(durText(t.dur))+'</b><span>'+(t.aprox?"Aprox. ":"")+esc(totalText(t))+'</span>';
       next.disabled=false;next.textContent="Elegir día y hora";
     }else{
       info.innerHTML=state.day?'<b>'+esc(shortDate(parseYmd(state.day)))+(state.time!=null?' · '+esc(fmtTime(state.time)):'')+'</b><span>'+(state.time!=null?"Listo para confirmar":"Ahora elige la hora")+'</span>':'<b>Elige un día</b><span>Desliza para ver más días</span>';
@@ -310,10 +370,16 @@
     var b;
     if((b=e.target.closest(".svc"))){
       var i=+b.dataset.i,k=state.sel.indexOf(i);
-      if(k>=0)state.sel.splice(k,1);else state.sel.push(i);
+      if(k>=0){state.sel.splice(k,1);delete state.qty[i];}else state.sel.push(i);
       state.sel.sort(function(a,c){return a-c;});
-      b.setAttribute("aria-pressed",k<0);state.sent=false;validateDay();updateBar("servicios");return;
+      state.sent=false;validateDay();refreshSvcs(false);return;
     }
+    if((b=e.target.closest("[data-q]"))){
+      var j=+b.dataset.i;state.qty[j]=Math.max(1,Math.min(20,qtyOf(j)+(+b.dataset.q)));
+      state.sent=false;validateDay();refreshSvcs(false);return;
+    }
+    if((b=e.target.closest(".cat"))){state.cat=b.dataset.cat;state.page=0;refreshSvcs(true);return;}
+    if((b=e.target.closest("[data-page]"))&&!b.disabled){state.page+=(+b.dataset.page);refreshSvcs(true);return;}
     if((b=e.target.closest(".day"))&&!b.disabled){
       state.day=b.dataset.d;state.time=null;state.sent=false;
       [].forEach.call(document.querySelectorAll(".day"),function(x){x.setAttribute("aria-pressed",x===b);});
@@ -328,7 +394,7 @@
     if(e.target.closest("#book"))return book();
     if(e.target.closest("#resend"))return window.open(waLink(bookingText()),"_blank");
     if(e.target.closest("#ics"))return downloadIcs();
-    if(e.target.closest("#restart")){state={sel:[],day:null,time:null,name:state.name,note:"",sent:false};return go("servicios");}
+    if(e.target.closest("#restart")){state={sel:[],qty:{},cat:"",page:0,day:null,time:null,name:state.name,note:"",sent:false};return go("servicios");}
     if((b=e.target.closest("#cMode button"))){
       [].forEach.call(b.parentNode.children,function(x){x.setAttribute("aria-pressed",x===b);});
       $("newWrap").hidden=b.dataset.m!=="cambiar";return;
@@ -339,12 +405,12 @@
 
   function bookingText(){
     var t=totals(),lines=["¡Hola! Quiero reservar una cita:",
-      "• Servicio"+(state.sel.length>1?"s":"")+": "+selNames().join(", "),
+      "• Servicio"+(state.sel.length>1?"s":"")+":"].concat(selNames().map(function(n){return"   – "+n;})).concat([
       "• Día: "+longDate(parseYmd(state.day)),
       "• Hora: "+fmtTime(state.time),
       "• Duración aprox.: "+durText(t.dur),
-      "• Total: "+priceText(t.cup,t.usd),
-      "• Nombre: "+state.name.trim()];
+      "• Total"+(t.aprox?" aprox.":"")+": "+totalText(t),
+      "• Nombre: "+state.name.trim()]);
     if(state.note.trim())lines.push("• Nota: "+state.note.trim());
     lines.push("","(Reserva hecha desde la página web)");
     return lines.join("\n");
