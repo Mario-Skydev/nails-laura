@@ -9,26 +9,48 @@
   :root{
     --p:#b0476b; --p-dark:#8a3654; --p-soft:#f3dfe6; --p-softer:#f8ecf0;
     --bg:#fbf6f3; --card:#ffffff; --ink:#2b2226; --muted:#7a6b70; --line:#eadfe1;
-    --ok:#1f8f5f; --wa:#1fa855; --radius:16px;
+    --wa:#1fa855; --radius:16px;
     --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
     --sans: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box}
   html,body{margin:0}
   body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+  body.has-bar{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
   button,input,textarea,select{font:inherit;color:inherit}
+  [hidden]{display:none!important}
   .wrap{max-width:720px;margin:0 auto;padding:0 16px}
-  header.hero{padding:40px 0 28px;text-align:center}
+
+  /* Cabecera */
+  header.hero{padding:36px 0 22px;text-align:center}
   .logo{width:96px;height:96px;border-radius:50%;object-fit:cover;background:var(--p-soft);display:block;margin:0 auto 14px;border:3px solid #fff;box-shadow:0 4px 18px rgba(0,0,0,.08)}
   .logo-fallback{display:flex;align-items:center;justify-content:center;font:600 34px var(--serif);color:var(--p)}
   h1{font:600 clamp(28px,7vw,40px)/1.15 var(--serif);margin:0 0 6px;letter-spacing:-.01em}
   .tagline{color:var(--muted);margin:0}
-  .meta{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
   .pill{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;color:var(--muted)}
-  section.step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:0 0 16px}
-  .step h2{font:600 20px var(--serif);margin:0 0 4px;display:flex;align-items:center;gap:10px}
-  .num{width:28px;height:28px;border-radius:50%;background:var(--p);color:#fff;font:600 14px var(--sans);display:inline-flex;align-items:center;justify-content:center;flex:none}
-  .hint{color:var(--muted);font-size:14px;margin:0 0 14px 38px}
+  .brandbar{display:flex;align-items:center;gap:10px;padding:16px 0 6px}
+  .brandbar .logo{width:40px;height:40px;margin:0;border-width:2px;font-size:18px}
+  .brandbar b{font:600 18px var(--serif)}
+
+  /* Progreso */
+  .steps{display:flex;gap:6px;margin:6px 0 18px;list-style:none;padding:0}
+  .steps li{flex:1;font-size:12px;color:var(--muted);text-align:center}
+  .steps li::before{content:"";display:block;height:4px;border-radius:4px;background:var(--line);margin-bottom:6px}
+  .steps li.on{color:var(--p-dark);font-weight:600}
+  .steps li.on::before,.steps li.done::before{background:var(--p)}
+
+  /* Vistas */
+  .view{animation:in .22s ease}
+  @keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .vhead{display:flex;align-items:center;gap:8px;margin:0 0 4px}
+  .vhead h2{font:600 24px/1.2 var(--serif);margin:0}
+  .back{border:0;background:transparent;color:var(--p-dark);font-weight:600;cursor:pointer;padding:6px 0;display:inline-flex;align-items:center;gap:4px}
+  .lead{color:var(--muted);margin:0 0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:0 0 14px}
+  .card h3{font:600 17px var(--serif);margin:0 0 12px}
+
+  /* Servicios */
   .services{display:grid;gap:10px}
   .svc{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:border-color .15s,background .15s}
   .svc:hover{border-color:var(--p)}
@@ -42,67 +64,84 @@
   .svc-side{text-align:right;flex:none}
   .price{font-weight:600;color:var(--p-dark);white-space:nowrap}
   .dur{color:var(--muted);font-size:13px;white-space:nowrap}
+
+  /* Día y hora */
+  .month{font-size:14px;color:var(--muted);margin:0 0 8px}
   .days{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
   .day{flex:none;width:64px;scroll-snap-align:start;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 0;text-align:center;cursor:pointer}
-  .day small{display:block;font-size:12px;color:var(--muted);text-transform:capitalize}
+  .day small{display:block;font-size:12px;color:var(--muted)}
   .day b{display:block;font-size:20px;line-height:1.2}
   .day:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
   .day[aria-pressed="true"]{background:var(--p);border-color:var(--p);color:#fff}
   .day[aria-pressed="true"] small{color:#fff}
-  .month{font-size:14px;color:var(--muted);margin:0 0 8px}
   .times{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
   .time{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px 0;cursor:pointer;font-weight:500}
   .time:hover{border-color:var(--p)}
   .time[aria-pressed="true"]{background:var(--p);border-color:var(--p);color:#fff}
-  .empty{color:var(--muted);font-size:14px;background:var(--p-softer);border-radius:10px;padding:12px}
+  .empty{color:var(--muted);font-size:14px;background:var(--p-softer);border-radius:10px;padding:12px;margin:0}
+
+  /* Confirmación */
+  .sum-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .sum-row:last-child{border-bottom:0;padding-bottom:0}
+  .sum-row:first-child{padding-top:0}
+  .sum-k{color:var(--muted);font-size:14px}
+  .sum-v{font-weight:500}
+  .sum-edit{border:0;background:transparent;color:var(--p-dark);font-size:14px;font-weight:600;cursor:pointer;padding:0;flex:none}
+  .total{display:flex;justify-content:space-between;font-weight:600;font-size:17px;padding-top:12px}
   label{display:block;font-weight:500;font-size:14px;margin:0 0 6px}
-  input[type=text],input[type=tel],input[type=date],input[type=time],textarea,select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;outline:none}
-  input:focus,textarea:focus,select:focus{border-color:var(--p)}
+  input[type=text],input[type=date],input[type=time],textarea{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;outline:none}
+  input:focus,textarea:focus{border-color:var(--p)}
   textarea{min-height:72px;resize:vertical}
   .field{margin-bottom:12px}
-  .summary{background:var(--p-softer);border-radius:12px;padding:14px;margin:6px 0 14px;font-size:15px}
-  .summary div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
-  .summary span:first-child{color:var(--muted)}
-  .summary span:last-child{text-align:right;font-weight:500}
-  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:12px;padding:15px;font-weight:600;cursor:pointer;text-decoration:none}
+  .field:last-child{margin-bottom:0}
+
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:12px;padding:15px;font-weight:600;cursor:pointer;text-decoration:none;font-size:16px}
+  .btn-p{background:var(--p);color:#fff}
+  .btn-p:disabled{background:#cfc6c8;cursor:not-allowed}
   .btn-wa{background:var(--wa);color:#fff;font-size:17px}
-  .btn-wa:disabled{background:#c9c2c4;cursor:not-allowed}
   .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink);margin-top:10px}
   .btn-ghost:hover{border-color:var(--p)}
   .btn svg{width:22px;height:22px;flex:none}
   .err{color:#b3261e;font-size:14px;margin:8px 0 0;min-height:1em}
-  .done{display:none;text-align:center;padding:8px 0 4px}
-  .done.show{display:block}
-  .done h3{font:600 20px var(--serif);margin:6px 0}
-  .done p{color:var(--muted);margin:0 0 12px}
-  details.cancel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:0 20px;margin-bottom:16px}
-  details.cancel summary{cursor:pointer;padding:18px 0;font-weight:600;list-style:none;display:flex;justify-content:space-between}
-  details.cancel summary::-webkit-details-marker{display:none}
-  details.cancel summary::after{content:"+";font-size:22px;line-height:1;color:var(--p)}
-  details.cancel[open] summary::after{content:"–"}
-  details.cancel .inner{padding:0 0 20px}
+  .done{text-align:center}
+  .done .ok{width:56px;height:56px;border-radius:50%;background:var(--p-soft);color:var(--p-dark);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:28px}
+  .done h3{font:600 20px var(--serif);margin:0 0 6px}
+  .done p{color:var(--muted);margin:0 0 14px}
+  .note{color:var(--muted);font-size:14px;margin:4px 0 14px;text-align:center}
+
+  /* Barra inferior */
+  .bar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(255,255,255,.97);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(0,0,0,.05);padding:12px 0 calc(12px + env(safe-area-inset-bottom));backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .bar .wrap{display:flex;align-items:center;gap:12px}
+  .bar-info{flex:1;min-width:0;font-size:14px;line-height:1.3}
+  .bar-info b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-info span{color:var(--muted)}
+  .bar .btn{width:auto;padding:13px 22px;flex:none}
+
   .seg{display:flex;gap:8px;margin-bottom:12px}
   .seg button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:10px;cursor:pointer}
   .seg button[aria-pressed="true"]{border-color:var(--p);background:var(--p-softer);font-weight:600}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  footer{text-align:center;color:var(--muted);font-size:13px;padding:8px 0 40px}
-  footer a{color:var(--muted)}
-  .preview-bar{position:sticky;top:0;z-index:5;background:#2b2226;color:#fff;text-align:center;font-size:13px;padding:8px 16px}
+  .linkbtn{display:block;margin:6px auto 0;border:0;background:transparent;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:14px;padding:8px}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:14px 0 28px}
+  .preview-bar{position:sticky;top:0;z-index:11;background:#2b2226;color:#fff;text-align:center;font-size:13px;padding:8px 16px}
   .loading{text-align:center;color:var(--muted);padding:80px 0}
 </style>
 </head>
 <body>
 <div id="previewBar" class="preview-bar" hidden>Vista previa: los cambios aún no están guardados</div>
 <div class="wrap" id="app"><p class="loading">Cargando…</p></div>
+<div class="bar" id="bar" hidden><div class="wrap"><div class="bar-info" id="barInfo"></div><button class="btn btn-p" id="next">Continuar</button></div></div>
 
 <script>
 (function(){
   "use strict";
   var WA_ICON='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-1-1.1-1.3-1.7-.1-.2 0-.4.1-.5l.4-.4.3-.4v-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.6.6-.9 1.4-.9 2.2.1 1 .5 1.9 1.1 2.7 1.1 1.6 2.5 2.9 4.2 3.7.5.2.9.4 1.4.5.5.2 1.1.2 1.6.1.6-.1 1.2-.5 1.5-1 .2-.3.2-.7.1-1.1 0 0-.2-.1-.3-.2z"/></svg>';
   var CAL_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+  var VIEWS=["servicios","fecha","confirmar"];
 
-  var cfg, state={sel:[],day:null,time:null};
+  var cfg, state={sel:[],day:null,time:null,name:"",note:"",sent:false};
 
+  // ---------- utilidades ----------
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function $(id){return document.getElementById(id);}
   function hexToRgb(h){h=String(h||"").replace("#","");if(h.length===3)h=h.split("").map(function(c){return c+c;}).join("");var n=parseInt(h,16);if(isNaN(n)||h.length!==6)return null;return[(n>>16)&255,(n>>8)&255,n&255];}
@@ -115,7 +154,7 @@
     r.setProperty("--p-soft",mix(p,"#ffffff",.8));r.setProperty("--p-softer",mix(p,"#ffffff",.91));
     r.setProperty("--bg",bg);r.setProperty("--line",mix(p,"#ffffff",.86));
   }
-  function fmtNum(n){return Number(n).toLocaleString("es-ES",{maximumFractionDigits:2}).replace(/\./g," ");}
+  function fmtNum(n){return Number(n).toLocaleString("es-ES",{maximumFractionDigits:2,useGrouping:true}).replace(/\./g," ");}
   function priceText(cup,usd){
     var m=cfg.negocio.moneda||"CUP",parts=[];
     if((m==="CUP"||m==="ambas")&&Number(cup)>0)parts.push(fmtNum(cup)+" CUP");
@@ -124,165 +163,219 @@
   }
   function durText(min){min=Number(min)||0;var h=Math.floor(min/60),m=min%60;return(h?h+" h":"")+(h&&m?" ":"")+(m?m+" min":"")||"—";}
   function toMin(t){var p=String(t||"0:0").split(":");return(+p[0])*60+(+p[1]||0);}
-  function fmtTime(min){var d=new Date(2000,0,1,Math.floor(min/60),min%60);return d.toLocaleTimeString("es-ES",{hour:"numeric",minute:"2-digit",hour12:true}).replace(/\s?a\.?\s?m\.?/i," a. m.").replace(/\s?p\.?\s?m\.?/i," p. m.");}
+  function fmtTime(min){var d=new Date(2000,0,1,Math.floor(min/60),min%60);return d.toLocaleTimeString("es-ES",{hour:"numeric",minute:"2-digit",hour12:true}).replace(/\s?a\.?\s?m\.?/i,"\u00a0a.\u00a0m.").replace(/\s?p\.?\s?m\.?/i,"\u00a0p.\u00a0m.");}
   function ymd(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);}
-  function longDate(d){var s=d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"});return s.charAt(0).toUpperCase()+s.slice(1);}
+  function parseYmd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+  function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+  function longDate(d){return cap(d.toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long"}));}
+  function shortDate(d){return cap(d.toLocaleDateString("es-ES",{weekday:"short",day:"numeric",month:"short"}).replace(/\./g,""));}
   function totals(){var dur=0,cup=0,usd=0;state.sel.forEach(function(i){var s=cfg.servicios[i];dur+=Number(s.duracion)||0;cup+=Number(s.precioCUP)||0;usd+=Number(s.precioUSD)||0;});return{dur:dur,cup:cup,usd:usd};}
+  function selNames(){return state.sel.map(function(i){return cfg.servicios[i].nombre;});}
   function dayCfg(d){var h=cfg.horario;if((h.diasCerrados||[]).indexOf(ymd(d))>=0)return null;var c=h.dias[String(d.getDay())];return c&&c.abierto?c:null;}
   function slotsFor(d){
     var c=dayCfg(d);if(!c)return[];
-    var need=Math.max(totals().dur,Number(cfg.horario.intervalo)||30),step=Number(cfg.horario.intervalo)||30;
+    var step=Number(cfg.horario.intervalo)||30,need=Math.max(totals().dur,step);
     var start=toMin(c.inicio),end=toMin(c.fin),out=[];
     var limit=new Date(Date.now()+(Number(cfg.horario.avisoMinimoHoras)||0)*3600e3);
     for(var t=start;t+need<=end;t+=step){
-      var dt=new Date(d.getFullYear(),d.getMonth(),d.getDate(),Math.floor(t/60),t%60);
-      if(dt>=limit)out.push(t);
+      if(new Date(d.getFullYear(),d.getMonth(),d.getDate(),Math.floor(t/60),t%60)>=limit)out.push(t);
     }
     return out;
   }
   function phoneDigits(){return String(cfg.negocio.whatsapp||"").replace(/\D/g,"");}
   function waLink(text){return"https://wa.me/"+phoneDigits()+"?text="+encodeURIComponent(text);}
+  function logoHtml(){var n=cfg.negocio;return n.logo?'<img class="logo" src="'+esc(n.logo)+'" alt="Logo de '+esc(n.nombre)+'">':'<div class="logo logo-fallback" aria-hidden="true">'+esc((n.nombre||"·").trim().charAt(0).toUpperCase())+'</div>';}
 
-  function render(){
-    var n=cfg.negocio;
-    document.title=(n.nombre||"Reserva")+" · Reserva tu cita";
-    var logo=n.logo?'<img class="logo" src="'+esc(n.logo)+'" alt="Logo de '+esc(n.nombre)+'">':'<div class="logo logo-fallback" aria-hidden="true">'+esc((n.nombre||"·").trim().charAt(0).toUpperCase())+'</div>';
-    var meta=[];
+  // ---------- navegación ----------
+  function current(){var h=location.hash.replace("#","");return VIEWS.indexOf(h)>=0||h==="cancelar"?h:"servicios";}
+  var cameFrom={};
+  function go(v,replace){
+    if(!replace)cameFrom[v]=current();
+    if(replace)history.replaceState(null,"","#"+v);else location.hash=v;
+    if(replace)show();
+  }
+  function allowed(v){
+    if(v==="fecha"&&!state.sel.length)return"servicios";
+    if(v==="confirmar"&&(!state.sel.length))return"servicios";
+    if(v==="confirmar"&&(state.day==null||state.time==null))return"fecha";
+    return v;
+  }
+  function show(){
+    var v=current(),a=allowed(v);
+    if(a!==v){go(a,true);return;}
+    var html=v==="servicios"?viewServicios():v==="fecha"?viewFecha():v==="confirmar"?viewConfirmar():viewCancelar();
+    $("app").innerHTML=html;
+    window.scrollTo(0,0);
+    if(v==="fecha"){renderDays();renderTimes();var sel=document.querySelector('.day[aria-pressed="true"]');if(sel)sel.scrollIntoView({inline:"center",block:"nearest"});}
+    updateBar(v);
+  }
+  function stepper(i){
+    var labels=["Servicios","Día y hora","Confirmar"];
+    return'<ol class="steps" aria-label="Pasos">'+labels.map(function(l,k){return'<li class="'+(k===i?"on":k<i?"done":"")+'"'+(k===i?' aria-current="step"':"")+'>'+l+'</li>';}).join("")+'</ol>';
+  }
+  function brandbar(){return'<div class="brandbar">'+logoHtml()+'<b>'+esc(cfg.negocio.nombre)+'</b></div>';}
+  function backBtn(to){return'<button type="button" class="back" data-go="'+to+'" aria-label="Volver">‹ Atrás</button>';}
+
+  // ---------- vistas ----------
+  function viewServicios(){
+    var n=cfg.negocio,meta=[];
     if(n.mostrarDireccion&&n.direccion)meta.push('<span class="pill">📍 '+esc(n.direccion)+'</span>');
     if(n.aDomicilio)meta.push('<span class="pill">🏠 Servicio a domicilio</span>');
     var svcs=cfg.servicios.map(function(s,i){
-      return '<button type="button" class="svc" data-i="'+i+'" aria-pressed="false"><span class="check"></span><span class="svc-body"><span class="svc-name">'+esc(s.nombre)+'</span>'+(s.descripcion?'<br><span class="svc-desc">'+esc(s.descripcion)+'</span>':'')+'</span><span class="svc-side"><span class="price">'+esc(priceText(s.precioCUP,s.precioUSD))+'</span><br><span class="dur">'+esc(durText(s.duracion))+'</span></span></button>';
+      var on=state.sel.indexOf(i)>=0;
+      return'<button type="button" class="svc" data-i="'+i+'" aria-pressed="'+on+'"><span class="check"></span><span class="svc-body"><span class="svc-name">'+esc(s.nombre)+'</span>'+(s.descripcion?'<br><span class="svc-desc">'+esc(s.descripcion)+'</span>':'')+'</span><span class="svc-side"><span class="price">'+esc(priceText(s.precioCUP,s.precioUSD))+'</span><br><span class="dur">'+esc(durText(s.duracion))+'</span></span></button>';
     }).join("");
-    $("app").innerHTML=
-      '<header class="hero">'+logo+'<h1>'+esc(n.nombre)+'</h1>'+(n.eslogan?'<p class="tagline">'+esc(n.eslogan)+'</p>':'')+(meta.length?'<div class="meta">'+meta.join("")+'</div>':'')+'</header>'+
-      '<section class="step"><h2><span class="num">1</span>Elige tus servicios</h2><p class="hint">Puedes elegir más de uno.</p><div class="services" id="svcs">'+(svcs||'<p class="empty">Aún no hay servicios publicados.</p>')+'</div></section>'+
-      '<section class="step"><h2><span class="num">2</span>Elige el día</h2><p class="hint">Desliza para ver más días.</p><p class="month" id="month"></p><div class="days" id="days"></div></section>'+
-      '<section class="step"><h2><span class="num">3</span>Elige la hora</h2><p class="hint" id="timeHint">Primero elige un servicio y un día.</p><div class="times" id="times"></div></section>'+
-      '<section class="step"><h2><span class="num">4</span>Confirma tu reserva</h2><p class="hint">Se abrirá WhatsApp con tu mensaje listo para enviar.</p>'+
-        '<div class="field"><label for="nm">Tu nombre</label><input type="text" id="nm" autocomplete="name" placeholder="Ej.: Ana Pérez"></div>'+
-        '<div class="field"><label for="nt">Nota (opcional)</label><textarea id="nt" placeholder="Diseño que te gustaría, alergias, etc."></textarea></div>'+
-        '<div class="summary" id="sum"></div>'+
-        '<button class="btn btn-wa" id="book" disabled>'+WA_ICON+'Reservar por WhatsApp</button><p class="err" id="err"></p>'+
-        '<div class="done" id="done"><h3>¡Casi listo!</h3><p>Envía el mensaje en WhatsApp. Tu cita queda confirmada cuando '+esc(n.nombre)+' te responda.</p><button class="btn btn-ghost" id="ics">'+CAL_ICON+'Añadir recordatorio a mi calendario</button></div>'+
-        (n.nota?'<p class="hint" style="margin:14px 0 0">'+esc(n.nota)+'</p>':'')+
-      '</section>'+
-      '<details class="cancel"><summary>¿Necesitas cancelar o cambiar tu cita?</summary><div class="inner">'+
-        '<div class="seg" id="cMode"><button type="button" data-m="cancelar" aria-pressed="true">Cancelar</button><button type="button" data-m="cambiar" aria-pressed="false">Cambiar fecha</button></div>'+
-        '<div class="field"><label for="cn">Tu nombre</label><input type="text" id="cn" autocomplete="name"></div>'+
+    return'<header class="hero">'+logoHtml()+'<h1>'+esc(n.nombre)+'</h1>'+(n.eslogan?'<p class="tagline">'+esc(n.eslogan)+'</p>':'')+(meta.length?'<div class="meta">'+meta.join("")+'</div>':'')+'</header>'+
+      '<div class="view">'+stepper(0)+'<div class="vhead"><h2>¿Qué te hacemos hoy?</h2></div><p class="lead">Elige uno o varios servicios.</p>'+
+      '<div class="services" id="svcs">'+(svcs||'<p class="empty">Aún no hay servicios publicados.</p>')+'</div>'+
+      '<button type="button" class="linkbtn" data-go="cancelar">¿Necesitas cancelar o cambiar una cita?</button></div>'+
+      '<footer>'+esc(n.nombre)+' · WhatsApp '+esc(n.whatsapp)+'</footer>';
+  }
+  function viewFecha(){
+    return brandbar()+'<div class="view">'+stepper(1)+'<div class="vhead">'+backBtn("servicios")+'</div><div class="vhead"><h2>Elige día y hora</h2></div><p class="lead">'+esc(selNames().join(", "))+' · '+esc(durText(totals().dur))+'</p>'+
+      '<div class="card"><h3>Día</h3><p class="month" id="month"></p><div class="days" id="days"></div></div>'+
+      '<div class="card"><h3>Hora</h3><div class="times" id="times"></div></div></div>';
+  }
+  function viewConfirmar(){
+    var t=totals(),d=parseYmd(state.day),n=cfg.negocio;
+    if(state.sent){
+      return brandbar()+'<div class="view">'+stepper(2)+'<div class="card done"><div class="ok">✓</div><h3>¡Casi listo!</h3><p>Envía el mensaje en WhatsApp. Tu cita queda confirmada cuando '+esc(n.nombre)+' te responda.</p>'+
+        '<button class="btn btn-ghost" id="ics">'+CAL_ICON+'Añadir recordatorio a mi calendario</button>'+
+        '<button class="btn btn-ghost" id="resend">'+WA_ICON+'Abrir WhatsApp de nuevo</button>'+
+        '<button type="button" class="linkbtn" id="restart">Hacer otra reserva</button></div></div>';
+    }
+    return brandbar()+'<div class="view">'+stepper(2)+'<div class="vhead">'+backBtn("fecha")+'</div><div class="vhead"><h2>Confirma tu cita</h2></div><p class="lead">Revisa los datos y envía tu reserva por WhatsApp.</p>'+
+      '<div class="card">'+
+        '<div class="sum-row"><div><div class="sum-k">Servicios</div><div class="sum-v">'+esc(selNames().join(", "))+'</div></div><button type="button" class="sum-edit" data-go="servicios">Cambiar</button></div>'+
+        '<div class="sum-row"><div><div class="sum-k">Día y hora</div><div class="sum-v">'+esc(longDate(d))+', '+esc(fmtTime(state.time))+'</div></div><button type="button" class="sum-edit" data-go="fecha">Cambiar</button></div>'+
+        '<div class="sum-row"><div><div class="sum-k">Duración aproximada</div><div class="sum-v">'+esc(durText(t.dur))+'</div></div></div>'+
+        '<div class="total"><span>Total</span><span>'+esc(priceText(t.cup,t.usd))+'</span></div>'+
+      '</div>'+
+      '<div class="card"><div class="field"><label for="nm">Tu nombre</label><input type="text" id="nm" autocomplete="name" placeholder="Ej.: Ana Pérez" value="'+esc(state.name)+'"></div>'+
+        '<div class="field"><label for="nt">Nota (opcional)</label><textarea id="nt" placeholder="Diseño que te gustaría, alergias, etc.">'+esc(state.note)+'</textarea></div></div>'+
+      (n.nota?'<p class="note">'+esc(n.nota)+'</p>':'')+
+      '<button class="btn btn-wa" id="book">'+WA_ICON+'Reservar por WhatsApp</button><p class="err" id="err"></p></div>';
+  }
+  function viewCancelar(){
+    return brandbar()+'<div class="view"><div class="vhead">'+backBtn("servicios")+'</div><div class="vhead"><h2>Cancelar o cambiar una cita</h2></div><p class="lead">Se enviará un mensaje por WhatsApp a '+esc(cfg.negocio.nombre)+'.</p>'+
+      '<div class="card"><div class="seg" id="cMode"><button type="button" data-m="cancelar" aria-pressed="true">Cancelar</button><button type="button" data-m="cambiar" aria-pressed="false">Cambiar fecha</button></div>'+
+        '<div class="field"><label for="cn">Tu nombre</label><input type="text" id="cn" autocomplete="name" value="'+esc(state.name)+'"></div>'+
         '<div class="row2"><div class="field"><label for="cd">Día de la cita</label><input type="date" id="cd"></div><div class="field"><label for="ct">Hora</label><input type="time" id="ct"></div></div>'+
-        '<div class="field" id="newWrap" hidden><label for="cw">¿Cuándo te vendría mejor?</label><input type="text" id="cw" placeholder="Ej.: el sábado por la mañana"></div>'+
-        '<button class="btn btn-wa" id="cBtn">'+WA_ICON+'Enviar por WhatsApp</button><p class="err" id="cErr"></p>'+
-      '</div></details>'+
-      '<footer>'+esc(n.nombre)+' · Reservas por WhatsApp '+esc(n.whatsapp)+'</footer>';
-    bind();renderDays();renderTimes();renderSummary();
+        '<div class="field" id="newWrap" hidden><label for="cw">¿Cuándo te vendría mejor?</label><input type="text" id="cw" placeholder="Ej.: el sábado por la mañana"></div></div>'+
+      '<button class="btn btn-wa" id="cBtn">'+WA_ICON+'Enviar por WhatsApp</button><p class="err" id="cErr"></p></div>';
   }
 
+  // ---------- día y hora ----------
   function renderDays(){
-    var box=$("days"),out=[],today=new Date();today.setHours(0,0,0,0);
+    var out=[],today=new Date();today.setHours(0,0,0,0);
     var n=Math.max(1,Math.min(120,Number(cfg.horario.diasAdelanto)||30));
     for(var i=0;i<n;i++){
       var d=new Date(today);d.setDate(today.getDate()+i);
-      var open=!!dayCfg(d)&&slotsFor(d).length>0;
-      var key=ymd(d),wd=d.toLocaleDateString("es-ES",{weekday:"short"}).replace(".","");
-      out.push('<button type="button" class="day" data-d="'+key+'" '+(open?"":"disabled ")+'aria-pressed="'+(state.day===key)+'" aria-label="'+esc(longDate(d))+'"><small>'+(i===0?"hoy":i===1?"mañana":esc(wd))+'</small><b>'+d.getDate()+'</b></button>');
+      var open=!!dayCfg(d)&&slotsFor(d).length>0,key=ymd(d);
+      var wd=d.toLocaleDateString("es-ES",{weekday:"short"}).replace(".","");
+      out.push('<button type="button" class="day" data-d="'+key+'" '+(open?"":"disabled ")+'aria-pressed="'+(state.day===key)+'" aria-label="'+esc(longDate(d))+'"><small>'+(i===0?"Hoy":i===1?"Mañana":esc(cap(wd)))+'</small><b>'+d.getDate()+'</b></button>');
     }
-    box.innerHTML=out.join("");
-    updateMonth();
+    $("days").innerHTML=out.join("");
+    var m=(state.day?parseYmd(state.day):new Date()).toLocaleDateString("es-ES",{month:"long",year:"numeric"});
+    $("month").textContent=cap(m);
   }
-  function updateMonth(){
-    var d=state.day?parseYmd(state.day):new Date();
-    var m=d.toLocaleDateString("es-ES",{month:"long",year:"numeric"});
-    $("month").textContent=m.charAt(0).toUpperCase()+m.slice(1);
-  }
-  function parseYmd(s){var p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
   function renderTimes(){
-    var box=$("times"),hint=$("timeHint");
-    if(!state.sel.length||!state.day){box.innerHTML="";hint.textContent="Primero elige un servicio y un día.";return;}
+    var box=$("times");
+    if(!state.day){box.innerHTML='<p class="empty" style="grid-column:1/-1">Primero elige un día.</p>';return;}
     var list=slotsFor(parseYmd(state.day));
     if(state.time!=null&&list.indexOf(state.time)<0)state.time=null;
-    hint.textContent="Duración aproximada: "+durText(totals().dur)+".";
-    box.innerHTML=list.length?list.map(function(t){return'<button type="button" class="time" data-t="'+t+'" aria-pressed="'+(state.time===t)+'">'+fmtTime(t)+'</button>';}).join(""):'<p class="empty" style="grid-column:1/-1">No quedan horas disponibles ese día para estos servicios. Prueba otro día.</p>';
+    box.innerHTML=list.length?list.map(function(t){return'<button type="button" class="time" data-t="'+t+'" aria-pressed="'+(state.time===t)+'">'+fmtTime(t)+'</button>';}).join(""):'<p class="empty" style="grid-column:1/-1">No quedan horas disponibles ese día. Prueba otro día.</p>';
   }
-  function renderSummary(){
-    var t=totals(),rows=[];
-    rows.push(["Servicios",state.sel.length?state.sel.map(function(i){return cfg.servicios[i].nombre;}).join(", "):"—"]);
-    rows.push(["Día",state.day?longDate(parseYmd(state.day)):"—"]);
-    rows.push(["Hora",state.time!=null?fmtTime(state.time):"—"]);
-    if(state.sel.length){rows.push(["Duración",durText(t.dur)]);rows.push(["Total",priceText(t.cup,t.usd)]);}
-    $("sum").innerHTML=rows.map(function(r){return"<div><span>"+esc(r[0])+"</span><span>"+esc(r[1])+"</span></div>";}).join("");
-    $("book").disabled=!(state.sel.length&&state.day&&state.time!=null);
+  function validateDay(){if(state.day&&slotsFor(parseYmd(state.day)).length===0){state.day=null;state.time=null;}}
+
+  // ---------- barra inferior ----------
+  function updateBar(v){
+    var bar=$("bar"),info=$("barInfo"),next=$("next"),t=totals();
+    var show=(v==="servicios"&&state.sel.length>0)||v==="fecha";
+    bar.hidden=!show;document.body.classList.toggle("has-bar",show);
+    if(!show)return;
+    if(v==="servicios"){
+      info.innerHTML='<b>'+state.sel.length+' servicio'+(state.sel.length>1?"s":"")+' · '+esc(durText(t.dur))+'</b><span>'+esc(priceText(t.cup,t.usd))+'</span>';
+      next.disabled=false;next.textContent="Elegir día y hora";
+    }else{
+      info.innerHTML=state.day?'<b>'+esc(shortDate(parseYmd(state.day)))+(state.time!=null?' · '+esc(fmtTime(state.time)):'')+'</b><span>'+(state.time!=null?"Listo para confirmar":"Ahora elige la hora")+'</span>':'<b>Elige un día</b><span>Desliza para ver más días</span>';
+      next.disabled=!(state.day&&state.time!=null);next.textContent="Continuar";
+    }
   }
 
-  function bind(){
-    $("svcs").addEventListener("click",function(e){
-      var b=e.target.closest(".svc");if(!b)return;
+  // ---------- eventos ----------
+  function onClick(e){
+    var g=e.target.closest("[data-go]");
+    if(g){var v=current(),t=g.dataset.go;if(g.classList.contains("back")&&cameFrom[v]===t){delete cameFrom[v];history.back();}else go(t);return;}
+    var b;
+    if((b=e.target.closest(".svc"))){
       var i=+b.dataset.i,k=state.sel.indexOf(i);
       if(k>=0)state.sel.splice(k,1);else state.sel.push(i);
-      state.sel.sort(function(a,b){return a-b;});
-      b.setAttribute("aria-pressed",k<0);
-      if(state.day&&slotsFor(parseYmd(state.day)).length===0){state.day=null;state.time=null;}
-      renderDays();renderTimes();renderSummary();
-    });
-    $("days").addEventListener("click",function(e){
-      var b=e.target.closest(".day");if(!b||b.disabled)return;
-      state.day=b.dataset.d;state.time=null;
-      Array.prototype.forEach.call(document.querySelectorAll(".day"),function(x){x.setAttribute("aria-pressed",x===b);});
-      updateMonth();renderTimes();renderSummary();
-    });
-    $("times").addEventListener("click",function(e){
-      var b=e.target.closest(".time");if(!b)return;
-      state.time=+b.dataset.t;
-      Array.prototype.forEach.call(document.querySelectorAll(".time"),function(x){x.setAttribute("aria-pressed",x===b);});
-      renderSummary();
-    });
-    $("book").addEventListener("click",function(){
-      var name=$("nm").value.trim();
-      if(!name){$("err").textContent="Escribe tu nombre para reservar.";$("nm").focus();return;}
-      if(!phoneDigits()){$("err").textContent="Este negocio aún no ha configurado su WhatsApp.";return;}
-      $("err").textContent="";
-      var t=totals(),note=$("nt").value.trim();
-      var lines=["¡Hola! Quiero reservar una cita:",
-        "• Servicio"+(state.sel.length>1?"s":"")+": "+state.sel.map(function(i){return cfg.servicios[i].nombre;}).join(", "),
-        "• Día: "+longDate(parseYmd(state.day)),
-        "• Hora: "+fmtTime(state.time),
-        "• Duración aprox.: "+durText(t.dur),
-        "• Total: "+priceText(t.cup,t.usd),
-        "• Nombre: "+name];
-      if(note)lines.push("• Nota: "+note);
-      lines.push("","(Reserva hecha desde la página web)");
-      window.open(waLink(lines.join("\n")),"_blank");
-      $("done").classList.add("show");
-    });
-    $("ics").addEventListener("click",downloadIcs);
-    $("cMode").addEventListener("click",function(e){
-      var b=e.target.closest("button");if(!b)return;
-      Array.prototype.forEach.call(this.children,function(x){x.setAttribute("aria-pressed",x===b);});
-      $("newWrap").hidden=b.dataset.m!=="cambiar";
-    });
-    $("cBtn").addEventListener("click",function(){
-      var mode=document.querySelector('#cMode [aria-pressed="true"]').dataset.m;
-      var name=$("cn").value.trim(),d=$("cd").value,t=$("ct").value;
-      if(!name||!d){$("cErr").textContent="Escribe tu nombre y el día de tu cita.";return;}
-      if(!phoneDigits()){$("cErr").textContent="Este negocio aún no ha configurado su WhatsApp.";return;}
-      $("cErr").textContent="";
-      var when=longDate(parseYmd(d))+(t?" a las "+fmtTime(toMin(t)):"");
-      var lines=mode==="cancelar"
-        ?["Hola, necesito CANCELAR mi cita:","• Nombre: "+name,"• Cita: "+when,"","Disculpa las molestias. ¡Gracias!"]
-        :["Hola, necesito CAMBIAR la fecha de mi cita:","• Nombre: "+name,"• Cita actual: "+when,"• Me vendría mejor: "+($("cw").value.trim()||"(a coordinar)"),"","¡Gracias!"];
-      window.open(waLink(lines.join("\n")),"_blank");
-    });
+      state.sel.sort(function(a,c){return a-c;});
+      b.setAttribute("aria-pressed",k<0);state.sent=false;validateDay();updateBar("servicios");return;
+    }
+    if((b=e.target.closest(".day"))&&!b.disabled){
+      state.day=b.dataset.d;state.time=null;state.sent=false;
+      [].forEach.call(document.querySelectorAll(".day"),function(x){x.setAttribute("aria-pressed",x===b);});
+      var m=parseYmd(state.day).toLocaleDateString("es-ES",{month:"long",year:"numeric"});$("month").textContent=cap(m);
+      renderTimes();updateBar("fecha");return;
+    }
+    if((b=e.target.closest(".time"))){
+      state.time=+b.dataset.t;state.sent=false;
+      [].forEach.call(document.querySelectorAll(".time"),function(x){x.setAttribute("aria-pressed",x===b);});
+      updateBar("fecha");return;
+    }
+    if(e.target.closest("#book"))return book();
+    if(e.target.closest("#resend"))return window.open(waLink(bookingText()),"_blank");
+    if(e.target.closest("#ics"))return downloadIcs();
+    if(e.target.closest("#restart")){state={sel:[],day:null,time:null,name:state.name,note:"",sent:false};return go("servicios");}
+    if((b=e.target.closest("#cMode button"))){
+      [].forEach.call(b.parentNode.children,function(x){x.setAttribute("aria-pressed",x===b);});
+      $("newWrap").hidden=b.dataset.m!=="cambiar";return;
+    }
+    if(e.target.closest("#cBtn"))return cancelSend();
   }
+  function onInput(e){if(e.target.id==="nm")state.name=e.target.value;if(e.target.id==="nt")state.note=e.target.value;}
 
+  function bookingText(){
+    var t=totals(),lines=["¡Hola! Quiero reservar una cita:",
+      "• Servicio"+(state.sel.length>1?"s":"")+": "+selNames().join(", "),
+      "• Día: "+longDate(parseYmd(state.day)),
+      "• Hora: "+fmtTime(state.time),
+      "• Duración aprox.: "+durText(t.dur),
+      "• Total: "+priceText(t.cup,t.usd),
+      "• Nombre: "+state.name.trim()];
+    if(state.note.trim())lines.push("• Nota: "+state.note.trim());
+    lines.push("","(Reserva hecha desde la página web)");
+    return lines.join("\n");
+  }
+  function book(){
+    if(!state.name.trim()){$("err").textContent="Escribe tu nombre para reservar.";$("nm").focus();return;}
+    if(!phoneDigits()){$("err").textContent="Este negocio aún no ha configurado su WhatsApp.";return;}
+    window.open(waLink(bookingText()),"_blank");
+    state.sent=true;show();
+  }
+  function cancelSend(){
+    var mode=document.querySelector('#cMode [aria-pressed="true"]').dataset.m;
+    var name=$("cn").value.trim(),d=$("cd").value,t=$("ct").value;
+    if(!name||!d){$("cErr").textContent="Escribe tu nombre y el día de tu cita.";return;}
+    if(!phoneDigits()){$("cErr").textContent="Este negocio aún no ha configurado su WhatsApp.";return;}
+    $("cErr").textContent="";
+    var when=longDate(parseYmd(d))+(t?" a las "+fmtTime(toMin(t)):"");
+    var lines=mode==="cancelar"
+      ?["Hola, necesito CANCELAR mi cita:","• Nombre: "+name,"• Cita: "+when,"","Disculpa las molestias. ¡Gracias!"]
+      :["Hola, necesito CAMBIAR la fecha de mi cita:","• Nombre: "+name,"• Cita actual: "+when,"• Me vendría mejor: "+($("cw").value.trim()||"(a coordinar)"),"","¡Gracias!"];
+    window.open(waLink(lines.join("\n")),"_blank");
+  }
   function downloadIcs(){
     var d=parseYmd(state.day),st=new Date(d.getFullYear(),d.getMonth(),d.getDate(),Math.floor(state.time/60),state.time%60);
     var en=new Date(st.getTime()+totals().dur*60000);
     function f(x){return x.getFullYear()+("0"+(x.getMonth()+1)).slice(-2)+("0"+x.getDate()).slice(-2)+"T"+("0"+x.getHours()).slice(-2)+("0"+x.getMinutes()).slice(-2)+"00";}
     function ie(s){return String(s).replace(/[\\;,]/g,function(c){return"\\"+c;}).replace(/\n/g,"\\n");}
     var n=cfg.negocio,title="Cita en "+n.nombre;
-    var desc=state.sel.map(function(i){return cfg.servicios[i].nombre;}).join(", ")+"\nWhatsApp: "+n.whatsapp;
     var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//reservas//ES","CALSCALE:GREGORIAN","BEGIN:VEVENT",
       "UID:"+Date.now()+"@reservas","DTSTAMP:"+f(new Date()),"DTSTART:"+f(st),"DTEND:"+f(en),
-      "SUMMARY:"+ie(title),"DESCRIPTION:"+ie(desc),(n.mostrarDireccion&&n.direccion?"LOCATION:"+ie(n.direccion):null),
+      "SUMMARY:"+ie(title),"DESCRIPTION:"+ie(selNames().join(", ")+"\nWhatsApp: "+n.whatsapp),(n.mostrarDireccion&&n.direccion?"LOCATION:"+ie(n.direccion):null),
       "BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:"+ie("Mañana: "+title),"END:VALARM",
       "BEGIN:VALARM","TRIGGER:-PT2H","ACTION:DISPLAY","DESCRIPTION:"+ie("En 2 horas: "+title),"END:VALARM",
       "END:VEVENT","END:VCALENDAR"].filter(Boolean).join("\r\n");
@@ -292,19 +385,21 @@
     setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1000);
   }
 
-  function normalize(c){
-    c=c||{};c.negocio=c.negocio||{};c.servicios=Array.isArray(c.servicios)?c.servicios:[];
-    c.horario=c.horario||{};c.horario.dias=c.horario.dias||{};return c;
+  // ---------- arranque ----------
+  function normalize(c){c=c||{};c.negocio=c.negocio||{};c.servicios=Array.isArray(c.servicios)?c.servicios:[];c.horario=c.horario||{};c.horario.dias=c.horario.dias||{};return c;}
+  function start(c){
+    cfg=normalize(c);applyColors();document.title=(cfg.negocio.nombre||"Reserva")+" · Reserva tu cita";
+    $("app").addEventListener("click",onClick);$("app").addEventListener("input",onInput);
+    $("next").addEventListener("click",function(){var v=current();if(v==="servicios"&&state.sel.length)go("fecha");else if(v==="fecha"&&state.day&&state.time!=null)go("confirmar");});
+    window.addEventListener("hashchange",show);
+    if(location.hash&&location.hash!=="#servicios"&&location.hash!=="#cancelar")history.replaceState(null,"","#servicios");
+    show();
   }
-  function load(){
-    var preview=/[?&]preview=1/.test(location.search),draft=null;
-    if(preview){try{draft=JSON.parse(localStorage.getItem("reservas-borrador")||"null");}catch(e){}}
-    if(draft){$("previewBar").hidden=false;cfg=normalize(draft);applyColors();render();return;}
-    fetch("config.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json();})
-      .then(function(c){cfg=normalize(c);applyColors();render();})
-      .catch(function(){$("app").innerHTML='<p class="loading">No se pudo cargar la información del negocio. Revisa tu conexión e inténtalo de nuevo.</p>';});
-  }
-  load();
+  var preview=/[?&]preview=1/.test(location.search),draft=null;
+  if(preview){try{draft=JSON.parse(localStorage.getItem("reservas-borrador")||"null");}catch(e){}}
+  if(draft){$("previewBar").hidden=false;start(draft);}
+  else fetch("config.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(start)
+    .catch(function(){$("app").innerHTML='<p class="loading">No se pudo cargar la información del negocio. Revisa tu conexión e inténtalo de nuevo.</p>';});
 })();
 </script>
 </body>
