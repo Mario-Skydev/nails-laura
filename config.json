@@ -1,7 +1,7 @@
 {
   "negocio": {
-    "nombre": "Laura's Beauty Parlor",
-    "eslogan": "Manicura y pedicura con cariño",
+    "nombre": "Laura's Paradise",
+    "eslogan": "Salón de Uñas Laura's Paradise",
     "logo": "logo.jpg?v=1794778624794",
     "colorPrincipal": "#b0476b",
     "colorFondo": "#fbf6f3",
@@ -10,13 +10,13 @@
     "mostrarDireccion": true,
     "aDomicilio": false,
     "moneda": "CUP",
-    "nota": "Por favor, llega 5 minutos antes de tu cita."
+    "nota": "Para sacar un turno debes hacer un depósito de 500 cup para confirmar tu cita, ese dinero se descontará al finalizar el servicio, si no vas a tu cita y no avisas con mínimo 24h de antelación pierdes el depósito, el pago de este deberá reali"
   },
   "servicios": [
     {
-      "nombre": "Manicura tradicional",
-      "descripcion": "Limado, cutícula y esmalte normal",
-      "precioCUP": 1500,
+      "nombre": "Acrílico y Polygel",
+      "descripcion": "Cortas 1-3",
+      "precioCUP": 2000,
       "precioUSD": 0,
       "duracion": 45
     },
