@@ -21,16 +21,16 @@
       "duracion": 45
     },
     {
-      "nombre": "Manicura en gel",
-      "descripcion": "Esmalte semipermanente de larga duración",
-      "precioCUP": 3000,
+      "nombre": "Acrílico y Polygel",
+      "descripcion": "Medianas 4-6",
+      "precioCUP": 2500,
       "precioUSD": 0,
       "duracion": 60
     },
     {
-      "nombre": "Pedicura",
-      "descripcion": "Pies relajados y uñas perfectas",
-      "precioCUP": 2000,
+      "nombre": "Acrílico y Polygel",
+      "descripcion": "Largas 7-9",
+      "precioCUP": 3000,
       "precioUSD": 0,
       "duracion": 60
     }
