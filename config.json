@@ -14,74 +14,251 @@
   },
   "servicios": [
     {
-      "nombre": "Acrílico y Polygel",
-      "descripcion": "Cortas 1-3",
+      "categoria": "Acrílico y Polygel",
+      "nombre": "Cortas (1-3)",
+      "descripcion": "",
       "precioCUP": 2000,
+      "precioUSD": 0,
+      "duracion": 120
+    },
+    {
+      "categoria": "Acrílico y Polygel",
+      "nombre": "Medianas (4-6)",
+      "descripcion": "",
+      "precioCUP": 2500,
+      "precioUSD": 0,
+      "duracion": 150
+    },
+    {
+      "categoria": "Acrílico y Polygel",
+      "nombre": "Largas (7-9)",
+      "descripcion": "",
+      "precioCUP": 3000,
+      "precioUSD": 0,
+      "duracion": 180
+    },
+    {
+      "categoria": "Press On",
+      "nombre": "Cortas (1-3)",
+      "descripcion": "",
+      "precioCUP": 1500,
+      "precioUSD": 0,
+      "duracion": 60
+    },
+    {
+      "categoria": "Press On",
+      "nombre": "Medianas (4-6)",
+      "descripcion": "",
+      "precioCUP": 1800,
+      "precioUSD": 0,
+      "duracion": 75
+    },
+    {
+      "categoria": "Press On",
+      "nombre": "Largas (7-9)",
+      "descripcion": "",
+      "precioCUP": 2000,
+      "precioUSD": 0,
+      "duracion": 90
+    },
+    {
+      "categoria": "Retoque",
+      "nombre": "Cortas (1-3)",
+      "descripcion": "",
+      "precioCUP": 1200,
+      "precioUSD": 0,
+      "duracion": 75
+    },
+    {
+      "categoria": "Retoque",
+      "nombre": "Medianas (4-6)",
+      "descripcion": "",
+      "precioCUP": 1500,
+      "precioUSD": 0,
+      "duracion": 90
+    },
+    {
+      "categoria": "Retoque",
+      "nombre": "Largas (7-9)",
+      "descripcion": "",
+      "precioCUP": 1800,
+      "precioUSD": 0,
+      "duracion": 105
+    },
+    {
+      "categoria": "Retoque",
+      "nombre": "Relleno ajeno",
+      "descripcion": "Se suma al retoque si el set lo hizo otra persona",
+      "precioCUP": 300,
+      "precioUSD": 0,
+      "duracion": 15
+    },
+    {
+      "categoria": "Pedicure",
+      "nombre": "Sencilla",
+      "descripcion": "",
+      "precioCUP": 700,
       "precioUSD": 0,
       "duracion": 45
     },
     {
-      "nombre": "Acrílico y Polygel",
-      "descripcion": "Medianas 4-6",
+      "categoria": "Pedicure",
+      "nombre": "Uñas de acrílico o Polygel",
+      "descripcion": "Se suma a la pedicure",
+      "precioCUP": 150,
+      "precioUSD": 0,
+      "duracion": 10,
+      "unidad": "c/u",
+      "cantidad": true
+    },
+    {
+      "categoria": "Pedicure",
+      "nombre": "Todas las uñas",
+      "descripcion": "",
+      "precioCUP": 1500,
+      "precioUSD": 0,
+      "duracion": 90
+    },
+    {
+      "categoria": "Base Rubber",
+      "nombre": "Base Rubber",
+      "descripcion": "",
+      "precioCUP": 1000,
+      "precioUSD": 0,
+      "duracion": 60,
+      "precioMaxCUP": 1500
+    },
+    {
+      "categoria": "Técnica Híbrida",
+      "nombre": "Técnica Híbrida",
+      "descripcion": "",
+      "precioCUP": 1500,
+      "precioUSD": 0,
+      "duracion": 90,
+      "precioMaxCUP": 2200
+    },
+    {
+      "categoria": "Técnica Híbrida",
+      "nombre": "Press On extralargas con técnica híbrida",
+      "descripcion": "",
       "precioCUP": 2500,
       "precioUSD": 0,
-      "duracion": 60
+      "duracion": 150,
+      "precioMaxCUP": 4000
     },
     {
-      "nombre": "Acrílico y Polygel",
-      "descripcion": "Largas 7-9",
-      "precioCUP": 3000,
-      "precioUSD": 0,
-      "duracion": 60
-    },
-    {
-      "nombre": "Press On",
-      "descripcion": "Cortas 1-3",
-      "precioCUP": 1500,
-      "precioUSD": 0,
-      "duracion": 30
-    },
-    {
-      "nombre": "Press On",
-      "descripcion": "Medianas 4-6",
-      "precioCUP": 1800,
-      "precioUSD": 0,
-      "duracion": 30
-    },
-    {
-      "nombre": "Press On",
-      "descripcion": "Largas 7-9",
-      "precioCUP": 2000,
-      "precioUSD": 0,
-      "duracion": 30
-    },
-    {
-      "nombre": "Retoque",
-      "descripcion": "Cortas 1-3",
-      "precioCUP": 1200,
-      "precioUSD": 0,
-      "duracion": 30
-    },
-    {
-      "nombre": "Retoque",
-      "descripcion": "Medianas 4-6",
-      "precioCUP": 1500,
-      "precioUSD": 0,
-      "duracion": 30
-    },
-    {
-      "nombre": "Retoque",
-      "descripcion": "Largas 7-9",
-      "precioCUP": 1800,
-      "precioUSD": 0,
-      "duracion": 30
-    },
-    {
-      "nombre": "Retoque",
-      "descripcion": "Relleno ajeno",
+      "categoria": "Otros servicios",
+      "nombre": "Retiro de uñas",
+      "descripcion": "",
       "precioCUP": 300,
       "precioUSD": 0,
       "duracion": 30
+    },
+    {
+      "categoria": "Otros servicios",
+      "nombre": "Cambio de puntas",
+      "descripcion": "",
+      "precioCUP": 200,
+      "precioUSD": 0,
+      "duracion": 15
+    },
+    {
+      "categoria": "Otros servicios",
+      "nombre": "Uñas caídas",
+      "descripcion": "Según el largo. Si faltan más de 3 uñas, se retiran todas y se hace un set nuevo.",
+      "precioCUP": 100,
+      "precioUSD": 0,
+      "duracion": 15,
+      "precioMaxCUP": 250,
+      "unidad": "c/u",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Reversa",
+      "descripcion": "",
+      "precioCUP": 300,
+      "precioUSD": 0,
+      "duracion": 10,
+      "unidad": "el par",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Flor mosaico",
+      "descripcion": "",
+      "precioCUP": 500,
+      "precioUSD": 0,
+      "duracion": 10,
+      "unidad": "el par",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Baby Boomer",
+      "descripcion": "",
+      "precioCUP": 200,
+      "precioUSD": 0,
+      "duracion": 10,
+      "unidad": "el par",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Relieve con gel sólido",
+      "descripcion": "",
+      "precioCUP": 200,
+      "precioUSD": 0,
+      "duracion": 10,
+      "unidad": "el par",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Encapsulado sencillo",
+      "descripcion": "",
+      "precioCUP": 150,
+      "precioUSD": 0,
+      "duracion": 10,
+      "unidad": "c/u",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Encapsulado compuesto",
+      "descripcion": "",
+      "precioCUP": 250,
+      "precioUSD": 0,
+      "duracion": 15,
+      "unidad": "c/u",
+      "cantidad": true
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Joyería",
+      "descripcion": "",
+      "precioCUP": 100,
+      "precioUSD": 0,
+      "duracion": 10,
+      "precioMaxCUP": 400
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Efectos",
+      "descripcion": "",
+      "precioCUP": 150,
+      "precioUSD": 0,
+      "duracion": 10,
+      "precioMaxCUP": 400
+    },
+    {
+      "categoria": "Decoraciones",
+      "nombre": "Dibujos",
+      "descripcion": "",
+      "precioCUP": 100,
+      "precioUSD": 0,
+      "duracion": 15,
+      "precioMaxCUP": 500
     }
   ],
   "horario": {
